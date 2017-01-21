@@ -217,13 +217,13 @@ function search() {
             var camp = result[course]['Campus'].split('_').join(' ');
             var row;
             if (camp === "Swarthmore") {
-                row = `<tbody><tr class='t' onclick='cSwap(this)' data-toggle="buttons-toggle"><td>${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
+                row = `<tbody><tr class='t' onclick='cSwap(this)' data-toggle="buttons-toggle"><td  height="50">${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
                 $(table).append(row);
             } else if (camp === "Haverford") {
                 row = `<tbody><tr class='t' onclick='cSwap(this)' data-toggle="buttons-toggle"><td  height="50">${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
                 $(table).append(row);
             } else {
-                row = `<tbody><tr class='t' onclick='cSwap(this)' data-toggle="buttons-toggle"><td>${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
+                row = `<tbody><tr class='t' onclick='cSwap(this)' data-toggle="buttons-toggle"><td  height="50">${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
                 $(table).append(row);
             }
         }
