@@ -1,6 +1,7 @@
 var courses
 var currentResults = []
 var selected = []
+var classSched = []
 
 function main() {
   // /*called when body loads*/
@@ -21,22 +22,10 @@ function main() {
   // })
   scheduler.config.repeat_date = "%m/%d/%Y";
   scheduler.config.include_end_by = true;
+  scheduler.config.start_on_monday = false;
   /*called when body loads*/
   scheduler.init('scheduler_here', new Date(), "week");
   scheduler.config.repeat_precise = true;
-
-  // HEADER STUFF
-  /*$(document).ready(function() {
-
-      // page is now ready, initialize the calendar...
-
-      $('#scheduler_here').fullCalendar({
-        left:   '???',
-        center: '',
-        right:  'TEST prev,next'
-      })
-  });*/
-  // HEADER STUFF
 
   loadData()
   $('#dropdown').find('a').click(function(e) {
@@ -53,42 +42,66 @@ function main() {
       $(this).blur();
     })
     //Changes***
-    /*
-        var events = [
-        {id:1,text:"course_name",start_date:"01/18/2017 10:00",end_date:"01/18/2017 17:00"},
-        {id:0,text:"some_text",start_date:"2017/01/16 10:00",end_date:"2017/01/16 17:00"},
-        {id:1,start_date:"2017-01-18 10:00:00",end_date:"2017-01-18 17:00:00",text:"some_text",details:"",rec_type:"day_1___",event_length:"7200",event_pid:"0"}
-        ];
-      scheduler.parse(events, "json");//takes the name and format of the data source
-    */
   createEvent("MWF Course", "09:30", "10:20", "MWF");
+  createEvent("TTH Course", "12:30", "16:20", "TTH");
 }
 
-function createEvent(course_name, start_time, end_time, repeat_list) {
-  if (repeat_list == "MWF") {
-    var events = [{
-      id: 1,
-      text: "WORK!",
-      start_date: "01/16/2017 " + start_time + ":" + "00",
-      end_date: "05/30/2017 " + end_time + ":" + "00",
-      event_length: "7200",
-      event_pid: "0",
-      rec_type: "week_1___1,3,5"
-    }];
-  } else if (repeat_list = "TH") {
-    var events = [{
-      id: 1,
-      text: "course_name",
-      start_date: "01/17/2017 start_time",
-      end_date: "01/17/2017 end_time"
-    }, {
-      id: 2,
-      text: "course_name",
-      start_date: "01/19/2017 start_time",
-      end_date: "01/19/2017 end_time"
-    }];
+function timeConvert(str) {
+  var p = str.split(':'),
+    s = 0,
+    m = 1;
+
+  while (p.length > 0) {
+    s += m * parseInt(p.pop(), 10);
+    m *= 60;
   }
-  scheduler.parse(events, "json"); //takes the name and format of the data source
+  return s;
+}
+
+function createEvent(course_name, start_time, end_time, repeat) {
+  var sd = "01/17/2017 "
+  var ed = "05/30/2017 "
+  var el = 60 * (timeConvert(end_time) - timeConvert(start_time))
+  var repNums
+  switch (repeat) {
+    case "MWF":
+      repNums = "1,3,5"
+      break;
+    case "TTH":
+      repNums = "2,4"
+      break;
+    case "F":
+      repNums = "5"
+      break;
+    case "W":
+      repNums = "3"
+      break;
+    case "M":
+      repNums = "1"
+      break;
+    case "T":
+      repNums = "2"
+      break;
+    case "TH":
+      repNums = "4"
+      break;
+    case "MW":
+      repNums = "1,3"
+      break;
+    default:
+      repNums = ""
+  }
+  classSched.push({
+    id: classSched.length + 1,
+    text: course_name,
+    start_date: sd + start_time + ":" + "00",
+    end_date: ed + end_time + ":" + "00",
+    event_length: el,
+    event_pid: "0",
+    rec_type: "week_1___" + repNums
+  });
+  //console.log(classSched)
+  scheduler.parse(classSched, "json"); //takes the name and format of the data source
 }
 //Changes***
 
