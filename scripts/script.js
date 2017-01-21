@@ -2,7 +2,7 @@ var courses
 
 function main() {
   /*called when body loads*/
-  scheduler.init('scheduler_here', new Date(),"month");
+  scheduler.init('scheduler_here', new Date(),"week");
   loadData()
   $('#dropdown').find('a').click(function(e) {
     $('#semester').text(this.innerHTML);
