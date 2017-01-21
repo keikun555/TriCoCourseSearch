@@ -1,0 +1,89 @@
+<div class="jumbotron">
+  <h1 class="text-center" style="font-size: 36px;color: grey;">TriCo Course Search</h1>
+  <h3 class="text-center" style="font-size: 24px;color: grey;">simplifies course selection to a mere searchbox</h3>
+  <div class="row">
+    <div class="col-md-3 col-sm-3 col-xs-3"></div>
+    <div class="col-md-2 col-sm-2 col-xs-2">
+      <area href="http://www.swarthmore.edu/" target="_blank" shape="circle"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' src="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/S.png"
+      /></a>
+    </div>
+    <div class="col-md-2 col-sm-2 col-xs-2">
+      <area href="https://www.brynmawr.edu/" target="_blank" shape="circle"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' src="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/BM2.png"
+      /></a>
+    </div>
+    <div class="col-md-2 col-sm-2 col-xs-2">
+      <area href="https://www.haverford.edu/" target="_blank" shape="circle"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' src="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/H.png"
+      /></a>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-3"></div>
+  </div>
+</div>
+<div class="container-box">
+  <div class="container center-block">
+    <!--<div class="row" style="margin-bottom: 25px">
+        <div class="col-md-1 col-sm-2 col-xs-3"></div>
+        <div class="col-md-2 col-sm-2 col-xs-6">
+          <a href="http://www.swarthmore.edu/" target="_blank"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' onclick="slogin()" src="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/S.png" /></a>
+        </div>
+        <div class="col-md-2 col-sm-1 col-xs-3"></div>
+        <div class="col-md-2 col-sm-2 col-xs-6">
+          <a href="https://www.brynmawr.edu/" target="_blank"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' onclick="bmlogin()" src="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/BM2.png" /></a>
+        </div>
+        <div class="col-md-2 col-sm-1 col-xs-0"></div>
+        <div class="col-md-2 col-sm-2 col-xs-6">
+          <a href="https://www.haverford.edu/" target="_blank"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' onclick="hlogin()" src="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/H.png" /></a>
+        </div>
+        <div class="col-md-1 col-sm-2 col-xs-0"></div>
+      </div>-->
+    <div class="row">
+      <div class="col-md-1">
+        <div class="input-group-btn">
+          <button type="button" id="semester" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="color: 042A2B;">Select Semester
+              <span class="caret"></span>
+            </button>
+          <ul class="dropdown-menu" id="dropdown">
+            <li class="dropdown-header">2016-2017</li>
+            <li><a href="#" style="color: 042A2B;">2017 Spring</a></li>
+            <li><a href="#" style="color: 042A2B;">2016 Fall</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-header">2015-2016</li>
+            <li><a href="#" style="color: 042A2B;">2016 Spring</a></li>
+            <li><a href="#" style="color: 042A2B;">2015 Fall</a></li>
+          </ul>
+        </div>
+        <div class="col-md-11"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="well">
+          <div class="input-group">
+            <input type="text" class="form-control input-lg" id="search" placeholder="Search">
+            <div class="input-group-btn">
+              <button class="btn btn-default btn-lg" onclick="search()" id="submit" type="submit">
+                  <i class="glyphicon glyphicon-search"></i>
+                </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <button id="swarthmore" type="checkbox" class="btn btn-primary btn-lg btn-block btn-swarthmore" data-toggle="buttons-toggle">Swarthmore</button>
+      </div>
+      <div class="col-md-4">
+        <button id="brynmawr" type="checkbox" class="btn btn-primary btn-lg btn-block btn-brynmawr" data-toggle="buttons-toggle">Bryn Mawr</button>
+      </div>
+      <div class="col-md-4">
+        <button id="haverford" type="checkbox" class="btn btn-primary btn-lg btn-block btn-haverford" data-toggle="buttons-toggle">Haverford</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 table-responsive" style="color: 042A2B;">
+        <table id="table" class="table table-hover table-lg">
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
