@@ -2,7 +2,7 @@ var courses
 
 function main() {
   /*called when body loads*/
-  $("#content").load("https://rawgit.com/keikun555/triCoCourseSearch/master/content.html");
+  scheduler.init('scheduler_here', new Date(),"month");
   loadData()
   $('#dropdown').find('a').click(function(e) {
     $('#semester').text(this.innerHTML);
