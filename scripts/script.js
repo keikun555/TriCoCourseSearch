@@ -23,11 +23,12 @@ function main() {
   scheduler.config.separate_short_events = true;
   scheduler.config.repeat_date = "%m/%d/%Y";
   scheduler.config.hour_date = "%g:%i%a";
-  scheduler.config.hour_size_px = 20;
-  scheduler.xy.scale_height = 10;
+  //scheduler.config.hour_size_px = 42;
+  scheduler.xy.scale_height = 20;
   scheduler.xy.scroll_width = 0;
   scheduler.config.calendar_time = "%g:%i%a";
   scheduler.config.xml_date = "%m/%d/%Y %g:%i%a"
+  scheduler.config.api_date = "%m/%d/%Y %g:%i%a"
   scheduler.config.include_end_by = true;
   scheduler.config.start_on_monday = false;
   /*called when body loads*/
@@ -49,8 +50,8 @@ function main() {
       $(this).blur();
     })
     //Changes***
-  createEvent("MWF Course", "9:30am", "10:20am", "MWF");
-  createEvent("TTH Course", "1:10pm", "2:30pm", "TTH");
+  //createEvent("MWF Course", "1000", "9:30am", "10:20am", "MWF");
+  //createEvent("TTH Course", "2000", "1:10pm", "2:30pm", "TTH");
 }
 
 function timeConvert(str) {
@@ -65,10 +66,11 @@ function timeConvert(str) {
   return s;
 }
 
-function createEvent(course_name, start_time, end_time, repeat) {
+function createEvent(course_name, course_number, start_time, end_time, repeat) {
   var sd = "01/17/2017 "
   var ed = "05/30/2017 "
   var el = 60 * (timeConvert(end_time) - timeConvert(start_time))
+  console.log(el)
   var repNums
   switch (repeat) {
     case "MWF":
@@ -98,17 +100,15 @@ function createEvent(course_name, start_time, end_time, repeat) {
     default:
       repNums = ""
   }
-  classSched.push({
-    id: classSched.length + 1,
-    text: course_name,
-    start_date: sd + start_time,
-    end_date: ed + end_time,
+  var id = scheduler.addEvent({
+    id: course_number,
+    start_date: "01/17/2017 " + start_time,
+    end_date: "05/27/2017 " + end_time,
+    rec_type: "week_1___" + repNums,
     event_length: el,
-    event_pid: "0",
-    rec_type: "week_1___" + repNums
-  });
-  //console.log(classSched)
-  scheduler.parse(classSched, "json"); //takes the name and format of the data source
+    event_pid: 0,
+    text: course_name
+  })
 }
 //Changes***
 
@@ -219,9 +219,18 @@ function search() {
       var name = result[course]['Course Title'];
       var id = result[course]['Registration ID'];
       var num = result[course]['CRN'];
-      var time = result[course]['Time And Days'].split(', ').join(',').split(',').join('<br>');
-      var prof = result[course]['Instructor'].split(', ').join(',').split(',').join(', ');
-      var camp = result[course]['Campus'].split('_').join(' ');
+      var time = "Not Specified"
+      try {
+        time = result[course]['Time And Days'].split(', ').join(',').split(',').join('<br>');
+      } catch (e) {}
+      var prof = "Not Specified"
+      try {
+        prof = result[course]['Instructor'].split(', ').join(',').split(',').join(', ');
+      } catch (e) {}
+      var camp
+      try {
+        camp = result[course]['Campus'].split('_').join(' ');
+      } catch (e) {}
       var row;
       row = `<tbody><tr onmouseleave='if($(this).attr("row_pressed")==="false"){this.className="tableRow"}' onmouseenter="rowHover(this)" id="${course}" type="checkbox" class="tableRow" data-toggle="buttons-toggle" onclick="update(this)" row_pressed="false" campus="${camp}"><td>${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
       $(table).append(row);
@@ -249,19 +258,19 @@ function rowHover(row) {
   }
 }
 
-function update(checkbox) {
-  course = currentResults[checkbox.id]
-  if ($(checkbox).attr('row_pressed') === "false") {
-    $(checkbox).attr('row_pressed', "true")
-    switch ($(checkbox).attr('campus')) {
+function update(row) {
+  course = currentResults[row.id]
+  if ($(row).attr('row_pressed') === "false") {
+    $(row).attr('row_pressed', "true")
+    switch ($(row).attr('campus')) {
       case "Swarthmore":
-        checkbox.className = "rowSActive"
+        row.className = "rowSActive"
         break;
       case "Haverford":
-        checkbox.className = "rowHActive"
+        row.className = "rowHActive"
         break;
       case "Bryn Mawr":
-        checkbox.className = "rowBMActive"
+        row.className = "rowBMActive"
         break;
       default:
         break;
@@ -286,10 +295,21 @@ function update(checkbox) {
   scheduler.parse(classSched, "json")
   for (course in selected) {
     times = selected[course]['Time And Days'].split(', ').join(',').split(',')
-    for (time in times) {
-      //console.log(times[time])
-      delTime = times[time].split(/ |-/)
-      createEvent(selected[course]["Course Title"], delTime[1], delTime[2], delTime[0]);
+    if (!(times[0] === "")) {
+      for (time in times) {
+        //console.log(times[time])
+        delTime = times[time].split(/ |-/)
+          //console.log(delTime)
+        createEvent(selected[course]["Course Title"], selected[course]["CRN"], delTime[1], delTime[2], delTime[0]);
+      }
+    }
+    else {
+      scheduler.addEventNow({
+        id: selected[course]["CRN"],
+        start_date: "01/01/2017 12:00am",
+        end_date: "01/01/2017 12:00am",
+        text: selected[course]["Course Title"]
+      })
     }
   }
   //console.log(classSched)
