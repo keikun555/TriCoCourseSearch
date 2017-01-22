@@ -14,10 +14,8 @@
   <script src="./scripts/dhtmlxscheduler/dhtmlxscheduler.js"></script>
   <script src="./scripts/dhtmlxscheduler/ext/dhtmlxscheduler_recurring.js"></script>
   <link rel="stylesheet" href="./scripts/dhtmlxscheduler/dhtmlxscheduler_flat.css" type="text/css">
-  <script src="./scripts/dhtmlxscheduler/ext/dhtmlxscheduler_quick_info.js"></script>
-  <script src="./scripts/dhtmlxscheduler/ext/dhtmlxscheduler_minical.js"></script>
   <!-- My Scripts -->
-  <script src="./scripts/script.js"></script>
+  <script src="./try.js"></script>
   <script src="./scripts/fuse.js"></script>
 
   <!-- JQuery -->
@@ -227,30 +225,13 @@
       background-color: #FFFFFF;
     }
 
-    .tableRow {
-      background: #ffffff;
+    table, th, td {
+        border: none;
+        border-collapse:collapse;
     }
-    .rowSHover{
-      background: #DDC4CE;
-    }
-    .rowSActive {
-      background: #85274E;
-      color: #F8F8F8;
-    }
-    .rowHHover{
-      background: #FFC0B9;
-    }
-    .rowHActive {
-      background: #D33F2E;
-      color: #F8F8F8;
-    }
-    .rowBMHover{
-      background: #F2E499;
-    }
-    .rowBMActive {
-      background: #E8C91E;
-      color: #F8F8F8;
-    }
+    .tr  { background: #ffffff }
+    .tr2 { background: #5B9BE0 }
+
   </style>
 </head>
 
@@ -276,24 +257,19 @@
     </div>
   </div>
   <div class="container-box">
-    <div class="container-box">
-      <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:500px;'>
-        <div class="dhx_cal_navline">
-          <div class="dhx_cal_prev_button">&nbsp;</div>
-          <div class="dhx_cal_next_button">&nbsp;</div>
-          <div class="dhx_cal_today_button"></div>
-          <div class="dhx_cal_date"></div>
-          <div class="dhx_minical_icon" id="dhx_minical_icon" onclick="show_minical()">&nbsp;</div>
-          <div class="dhx_cal_date"></div>
-          <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
-          <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
-          <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
-        </div>
-        <div class="dhx_cal_header"></div>
-        <div class="dhx_cal_data"></div>
+    <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:600px;'>
+      <div class="dhx_cal_navline">
+        <div class="dhx_cal_prev_button">&nbsp;</div>
+        <div class="dhx_cal_next_button">&nbsp;</div>
+        <div class="dhx_cal_today_button"></div>
+        <div class="dhx_cal_date"></div>
+        <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+        <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+        <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
       </div>
+      <div class="dhx_cal_header"></div>
+      <div class="dhx_cal_data"></div>
     </div>
-    <div class="container">
       <!--<div class="row" style="margin-bottom: 25px">
           <div class="col-md-1 col-sm-2 col-xs-3"></div>
           <div class="col-md-2 col-sm-2 col-xs-6">
@@ -309,55 +285,54 @@
           </div>
           <div class="col-md-1 col-sm-2 col-xs-0"></div>
         </div>-->
-      <div class="row">
-        <div class="col-md-1">
-          <div class="input-group-btn">
-            <button type="button" id="semester" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="color: 042A2B;">Select Semester
-                <span class="caret"></span>
-              </button>
-            <ul class="dropdown-menu" id="dropdown">
-              <li class="dropdown-header">2016-2017</li>
-              <li><a href="#" style="color: 042A2B;">2017 Spring</a></li>
-              <li><a href="#" style="color: 042A2B;">2016 Fall</a></li>
-              <li class="divider"></li>
-              <li class="dropdown-header">2015-2016</li>
-              <li><a href="#" style="color: 042A2B;">2016 Spring</a></li>
-              <li><a href="#" style="color: 042A2B;">2015 Fall</a></li>
-            </ul>
-          </div>
-          <div class="col-md-11"></div>
+    <div class="row">
+      <div class="col-md-1">
+        <div class="input-group-btn">
+          <button type="button" id="semester" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="color: 042A2B;">Select Semester
+              <span class="caret"></span>
+            </button>
+          <ul class="dropdown-menu" id="dropdown">
+            <li class="dropdown-header">2016-2017</li>
+            <li><a href="#" style="color: 042A2B;">2017 Spring</a></li>
+            <li><a href="#" style="color: 042A2B;">2016 Fall</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-header">2015-2016</li>
+            <li><a href="#" style="color: 042A2B;">2016 Spring</a></li>
+            <li><a href="#" style="color: 042A2B;">2015 Fall</a></li>
+          </ul>
         </div>
+        <div class="col-md-11"></div>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="well">
-            <div class="input-group">
-              <input type="text" class="form-control input-lg" id="search" placeholder="Search">
-              <div class="input-group-btn">
-                <button class="btn btn-default btn-lg" onclick="search()" id="submit" type="submit">
-                    <i class="glyphicon glyphicon-search"></i>
-                  </button>
-              </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="well">
+          <div class="input-group">
+            <input type="text" class="form-control input-lg" id="search" placeholder="Search">
+            <div class="input-group-btn">
+              <button class="btn btn-default btn-lg" onclick="search()" id="submit" type="submit">
+                  <i class="glyphicon glyphicon-search"></i>
+                </button>
             </div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-4">
-          <button id="swarthmore" type="checkbox" class="btn btn-primary btn-lg btn-block btn-swarthmore" data-toggle="buttons-toggle">Swarthmore</button>
-        </div>
-        <div class="col-md-4">
-          <button id="brynmawr" type="checkbox" class="btn btn-primary btn-lg btn-block btn-brynmawr" data-toggle="buttons-toggle">Bryn Mawr</button>
-        </div>
-        <div class="col-md-4">
-          <button id="haverford" type="checkbox" class="btn btn-primary btn-lg btn-block btn-haverford" data-toggle="buttons-toggle">Haverford</button>
-        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <button id="swarthmore" type="checkbox" class="btn btn-primary btn-lg btn-block btn-swarthmore" data-toggle="buttons-toggle">Swarthmore</button>
       </div>
-      <div class="row">
-        <div class="col-md-12 table-responsive" style="color: 042A2B;">
-          <table id="table" class="table table-lg">
-          </table>
-        </div>
+      <div class="col-md-4">
+        <button id="brynmawr" type="checkbox" class="btn btn-primary btn-lg btn-block btn-brynmawr" data-toggle="buttons-toggle">Bryn Mawr</button>
+      </div>
+      <div class="col-md-4">
+        <button id="haverford"  class="btn btn-primary btn-lg btn-block btn-haverford" data-toggle="buttons-toggle">Haverford</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 table-responsive" style="color: 042A2B;">
+        <table id="table" class="table table-lg">
+        </table>
       </div>
     </div>
   </div>

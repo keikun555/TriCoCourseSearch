@@ -20,7 +20,14 @@ function main() {
   // $(":checkbox").mouseup(function() {
   //   $(this).blur();
   // })
+  scheduler.config.separate_short_events = true;
   scheduler.config.repeat_date = "%m/%d/%Y";
+  scheduler.config.hour_date = "%g:%i%a";
+  scheduler.config.hour_size_px = 20;
+  scheduler.xy.scale_height = 10;
+  scheduler.xy.scroll_width = 0;
+  scheduler.config.calendar_time = "%g:%i%a";
+  scheduler.config.xml_date = "%m/%d/%Y %g:%i%a"
   scheduler.config.include_end_by = true;
   scheduler.config.start_on_monday = false;
   /*called when body loads*/
@@ -42,8 +49,8 @@ function main() {
       $(this).blur();
     })
     //Changes***
-  createEvent("MWF Course", "09:30", "10:20", "MWF");
-  createEvent("TTH Course", "12:30", "16:20", "TTH");
+  createEvent("MWF Course", "9:30am", "10:20am", "MWF");
+  createEvent("TTH Course", "1:10pm", "2:30pm", "TTH");
 }
 
 function timeConvert(str) {
@@ -94,8 +101,8 @@ function createEvent(course_name, start_time, end_time, repeat) {
   classSched.push({
     id: classSched.length + 1,
     text: course_name,
-    start_date: sd + start_time + ":" + "00",
-    end_date: ed + end_time + ":" + "00",
+    start_date: sd + start_time,
+    end_date: ed + end_time,
     event_length: el,
     event_pid: "0",
     rec_type: "week_1___" + repNums
@@ -216,38 +223,92 @@ function search() {
       var prof = result[course]['Instructor'].split(', ').join(',').split(',').join(', ');
       var camp = result[course]['Campus'].split('_').join(' ');
       var row;
-      if (camp === "Swarthmore") {
-        row = `<tbody><tr><td>${name}</td><td><button id="${course}" type="checkbox" class="btn btn-swarthmore" data-toggle="buttons-toggle" onclick="update(this)" aria-pressed="false">${id}</button></td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
-        $(table).append(row);
-      } else if (camp === "Haverford") {
-        row = `<tbody><tr><td>${name}</td><td><button id="${course}" type="checkbox" class="btn btn-haverford" data-toggle="buttons-toggle" onclick="update(this)" aria-pressed="false">${id}</button></td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
-        $(table).append(row);
-      } else {
-        row = `<tbody><tr><td>${name}</td><td><button id="${course}" type="checkbox" class="btn btn-brynmawr" data-toggle="buttons-toggle" onclick="update(this)" aria-pressed="false">${id}</button></td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
-        $(table).append(row);
-      }
+      row = `<tbody><tr onmouseleave='if($(this).attr("row_pressed")==="false"){this.className="tableRow"}' onmouseenter="rowHover(this)" id="${course}" type="checkbox" class="tableRow" data-toggle="buttons-toggle" onclick="update(this)" row_pressed="false" campus="${camp}"><td>${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
+      $(table).append(row);
     }
   } else {
     $(table).html('<div class="alert alert-warning"><strong>No classes found!</strong></div>')
   }
 }
 
+function rowHover(row) {
+  if ($(row).attr("row_pressed") === "false") {
+    switch ($(row).attr('campus')) {
+      case "Swarthmore":
+        row.className = "rowSHover"
+        break;
+      case "Haverford":
+        row.className = "rowHHover"
+        break;
+      case "Bryn Mawr":
+        row.className = "rowBMHover"
+        break;
+      default:
+        break;
+    }
+  }
+}
+
 function update(checkbox) {
   course = currentResults[checkbox.id]
-  if ($(checkbox).attr('aria-pressed') === "false") {
+  if ($(checkbox).attr('row_pressed') === "false") {
+    $(checkbox).attr('row_pressed', "true")
+    switch ($(checkbox).attr('campus')) {
+      case "Swarthmore":
+        checkbox.className = "rowSActive"
+        break;
+      case "Haverford":
+        checkbox.className = "rowHActive"
+        break;
+      case "Bryn Mawr":
+        checkbox.className = "rowBMActive"
+        break;
+      default:
+        break;
+    }
     selected.push(course)
     index = courses[course["Campus"]][course["Semester"]].indexOf(course)
     if (index > -1) {
       courses[course["Campus"]][course["Semester"]].splice(index, 1)
     }
     //console.log(`Added ${course["Course Title"]} (${course["Campus"]}) to selected`)
-  } else if ($(checkbox).attr('aria-pressed') === "true") {
+  } else if ($(checkbox).attr('row_pressed') === "true") {
+    $(checkbox).attr('row_pressed', "false")
+    checkbox.className = "tableRow"
     courses[course["Campus"]][course["Semester"]].push(course)
     index = selected.indexOf(course)
     if (index > -1) {
       selected.splice(index, 1)
     }
     //console.log(`Removed ${course["Course Title"]} (${course["Campus"]}) from selected`)
+  }
+  classSched = []
+  scheduler.parse(classSched, "json")
+  for (course in selected) {
+    times = selected[course]['Time And Days'].split(', ').join(',').split(',')
+    for (time in times) {
+      //console.log(times[time])
+      delTime = times[time].split(/ |-/)
+      createEvent(selected[course]["Course Title"], delTime[1], delTime[2], delTime[0]);
+    }
+  }
+  //console.log(classSched)
+
+}
+
+function show_minical() {
+  if (scheduler.isCalendarVisible()) {
+    scheduler.destroyCalendar();
+  } else {
+    scheduler.renderCalendar({
+      position: "dhx_minical_icon",
+      date: scheduler._date,
+      navigation: true,
+      handler: function(date, calendar) {
+        scheduler.setCurrentView(date);
+        scheduler.destroyCalendar()
+      }
+    });
   }
 }
 
