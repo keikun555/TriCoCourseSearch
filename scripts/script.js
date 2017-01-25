@@ -50,8 +50,8 @@ function main() {
       $(this).blur();
     })
     //Changes***
-  //createEvent("MWF Course", "1000", "9:30am", "10:20am", "MWF");
-  //createEvent("TTH Course", "2000", "1:10pm", "2:30pm", "TTH");
+    //createEvent("MWF Course", "1000", "9:30am", "10:20am", "MWF");
+    //createEvent("TTH Course", "2000", "1:10pm", "2:30pm", "TTH");
 }
 
 function timeConvert(str) {
@@ -302,8 +302,7 @@ function update(row) {
           //console.log(delTime)
         createEvent(selected[course]["Course Title"], selected[course]["CRN"], delTime[1], delTime[2], delTime[0]);
       }
-    }
-    else {
+    } else {
       scheduler.addEventNow({
         id: selected[course]["CRN"],
         start_date: "01/01/2017 12:00am",
