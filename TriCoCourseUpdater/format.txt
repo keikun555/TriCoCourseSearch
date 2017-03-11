@@ -1,0 +1,23 @@
+Swarthmore
+Registration-ID	Course Name	Instructor	Misc	Days and Times	Location
+ANCH 030 01
+Hstry/Archaeology Roman Empire
+Evans, M
+
+TTH 02:40pm-03:55pm
+Trotter Hall 215
+
+Registration-ID	Course Name	Instructor	Misc	Days and Times	Location
+AFSTH101B001
+Introduction to African and Africana Studies
+Noonan-Ngwane,Zolani
+Class Nbr: 1911 SO
+TTH 2:30pm-4:00pm
+
+Bryn Mawr
+Registration-ID	Course Name	Instructor	Misc	Days and Times	Location
+ANTHB102001
+Intro to Cultural Anthropology
+Fioratta,Susanna
+Class Nbr: 1244 CC;
+MWF 10:10am-11:00am

@@ -70,7 +70,7 @@ function createEvent(course_name, course_number, start_time, end_time, repeat) {
   var sd = "01/17/2017 "
   var ed = "05/30/2017 "
   var el = 60 * (timeConvert(end_time) - timeConvert(start_time))
-  console.log(el)
+  //console.log(el)
   var repNums
   switch (repeat) {
     case "MWF":
@@ -147,7 +147,12 @@ function find(searchText, semester, campuses) {
     keys: [
       "Course Title",
       "Registration ID",
-      "Room Location"
+      "Room Location",
+      "Time And Days",
+      "Department",
+      "Instructor",
+      "CRN",
+      "Registration ID"
     ]
   };
   list = []
