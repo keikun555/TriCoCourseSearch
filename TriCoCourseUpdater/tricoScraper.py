@@ -1,7 +1,8 @@
 """
 Kei Imada
-20161203
-Gets data from TriCo Course Guide
+20170311
+"python tricoScraper.py [semester0] [semester1] . . . . "
+As many semesters possible to scrape, to see valie semesters, see documentation for function scrape(semester) (line 20)
 """
 import lxml
 from lxml import html
@@ -17,6 +18,10 @@ session_requests = requests.session()
 
 
 def scrape(semester):
+    """
+    scrapes the trico search website with given semester
+    @param semester a string, a valid semester is in the form [Season]_[year] - example: "Fall_2017"
+    """
     global url, session_requests
     urlStub = "search.cgi"
     load = {}
@@ -90,8 +95,14 @@ def scrape(semester):
         json.dump(courseList, outfile)
         outfile.close()
 
+
 def getCourseURLs(semester, campus, departments):
-    """given semester, campus, and departments, get course titles in list form and return list of title lists"""
+    """
+    given semester, campus, and departments, get course titles in list form and return list of title lists
+    @param semester string, a valid semester is in the form [Season]_[year] - example: "Fall_2017"
+    @param campus string that can be "Swarthmore", "Haverford", or "Bryn_Mawr"
+    @param departments list of strings of possible departments, for a list of possible departments, go to the trico course website
+    """
     global url, session_requests
     urlStub = "search.cgi"
     linkStubs = []
@@ -151,7 +162,9 @@ def userInput(msg, kind):
 
 
 def zipper(name, L):
-    """given name and L, returns zipped list with name:L[i]"""
+    """
+    a helper function where given name and L, returns zipped list with name:L[i]
+    """
     names = []
     for i in range(len(L)):
         names.append(name)
