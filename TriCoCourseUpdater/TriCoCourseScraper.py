@@ -82,7 +82,7 @@ def scrape():
         assert(len(keys) == len(values))
         courseList.append(courseDict)
         displayProgressBar(len(courseList), len(urlList))
-      path = ("data\\%s\\%s.json" % (campus, semester))
+      path = ("./data/%s/%s.json" % (campus, semester))
       directory = os.path.dirname(path)
       if not os.path.exists(directory):
         os.makedirs(directory)
