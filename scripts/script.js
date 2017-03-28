@@ -1,7 +1,82 @@
+//Global variables
 var courses
 var currentResults = []
 var selected = []
 var classSched = []
+var campuses = ['Bryn_Mawr', 'Haverford', 'Swarthmore'];
+var semesters = ['Fall_2015', 'Spring_2016', 'Fall_2016', 'Spring_2017'];
+var semesterSchedule = {
+  'Fall_2015': {
+    'Bryn_Mawr': {
+      'start': '08/31/2015',
+      'end': '12/10/2015'
+    },
+    'Haverford': {
+      'start': '08/31/2015',
+      'end': '12/11/2015'
+    },
+    'Swarthmore': {
+      'start': '08/31/2015',
+      'end': '12/11/2015'
+    }
+  },
+  'Spring_2016': {
+    'Bryn_Mawr': {
+      'start': '01/19/2016',
+      'end': '04/29/2016'
+    },
+    'Haverford': {
+      'start': '01/19/2016',
+      'end': '04/29/2016'
+    },
+    'Swarthmore': {
+      'start': '01/19/2016',
+      'end': '04/29/2016'
+    }
+  },
+  'Fall_2016' {
+    'Bryn_Mawr': {
+      'start': '08/29/2016',
+      'end': '12/08/2016'
+    },
+    'Haverford': {
+      'start': '08/29/2016',
+      'end': '12/09/2016'
+    },
+    'Swarthmore': {
+      'start': '08/29/2016',
+      'end': '12/06/2016'
+    }
+  },
+  'Spring_2017' {
+    'Bryn_Mawr': {
+      'start': '01/17/2017',
+      'end': '04/28/2017'
+    },
+    'Haverford': {
+      'start': '01/17/2017',
+      'end': '04/28/2017'
+    },
+    'Swarthmore': {
+      'start': '01/17/2017',
+      'end': '04/28/2017'
+    }
+  },
+  'Fall_2017' {
+    'Bryn_Mawr': {
+      'start': '09/05/2017',
+      'end': '01/22/2017'
+    },
+    'Haverford': {
+      'start': '09/05/2017',
+      'end': '12/15/2017'
+    },
+    'Swarthmore': {
+      'start': '09/04/2017',
+      'end': '12/12/2017'
+    }
+  }
+}
 
 function main() {
   // /*called when body loads*/
@@ -67,8 +142,8 @@ function timeConvert(str) {
 }
 
 function createEvent(course_name, course_number, start_time, end_time, repeat) {
-  var sd = "01/17/2017 "
-  var ed = "05/30/2017 "
+  var sd = "01/17/2017"
+  var ed = "05/30/2017"
   var el = 60 * (timeConvert(end_time) - timeConvert(start_time))
   //console.log(el)
   var repNums
@@ -102,8 +177,8 @@ function createEvent(course_name, course_number, start_time, end_time, repeat) {
   }
   var id = scheduler.addEvent({
     id: course_number,
-    start_date: "01/17/2017 " + start_time,
-    end_date: "05/27/2017 " + end_time,
+    start_date: "01/17/2017" + " " + start_time,
+    end_date: "05/27/2017" + " " + end_time,
     rec_type: "week_1___" + repNums,
     event_length: el,
     event_pid: 0,
@@ -113,8 +188,6 @@ function createEvent(course_name, course_number, start_time, end_time, repeat) {
 //Changes***
 
 function loadData() {
-  var campuses = ['Bryn_Mawr', 'Haverford', 'Swarthmore'];
-  var semesters = ['Fall_2015', 'Fall_2016', 'Spring_2016', 'Spring_2017'];
   courses = {};
   var urlStub = 'https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/data/';
   //formats to json of campuses of semesters of courses
@@ -167,35 +240,35 @@ function find(searchText, semester, campuses) {
   //search the list
   var fuse = new Fuse(list, options)
   return fuse.search(searchText)
-    //
-    // result = [];
-    // for (campus in campuses) {
-    //     result.push(courses[campuses[campus]][semester].filter(function(course) {
-    //         values = []
-    //         for (element in course) {
-    //             values.push(course[element])
-    //         }
-    //         for (word in searchText) {
-    //             for (value in values) {
-    //                 if (values[value].toLowerCase().includes(searchText[word].toLowerCase())) {
-    //                     return true
-    //                 }
-    //             }
-    //         }
-    //         return false
-    //     }));
-    // }
-    // result = result.reduce(function(list, campus) {
-    //     return list.concat(campus);
-    // }, []);
-    // return result
+  //
+  // result = [];
+  // for (campus in campuses) {
+  //     result.push(courses[campuses[campus]][semester].filter(function(course) {
+  //         values = []
+  //         for (element in course) {
+  //             values.push(course[element])
+  //         }
+  //         for (word in searchText) {
+  //             for (value in values) {
+  //                 if (values[value].toLowerCase().includes(searchText[word].toLowerCase())) {
+  //                     return true
+  //                 }
+  //             }
+  //         }
+  //         return false
+  //     }));
+  // }
+  // result = result.reduce(function(list, campus) {
+  //     return list.concat(campus);
+  // }, []);
+  // return result
 }
 
 function search() {
   var table = document.getElementById("table");
   var tableHeader = '<thead><tr><th style="text-align: center;">Course Name</th><th style="text-align: center;">Registration ID</th><th style="text-align: center;">Course Number</th><th style="text-align: center;">Time Offered</th><th style="text-align: center;">Instructor</th><th style="text-align: center;">Campus</th></tr></thead>'
   searchText = document.getElementById("search").value.trim() //.split(' ');
-    //if nothing in searchText, shows all courses in given campus and semester
+  //if nothing in searchText, shows all courses in given campus and semester
   semester = document.getElementById('semester').textContent.split(' ');
   if (semester[0] === 'Select') {
     //if no semester is selected, choose most recent one
@@ -304,7 +377,7 @@ function update(row) {
       for (time in times) {
         //console.log(times[time])
         delTime = times[time].split(/ |-/)
-          //console.log(delTime)
+        //console.log(delTime)
         createEvent(selected[course]["Course Title"], selected[course]["CRN"], delTime[1], delTime[2], delTime[0]);
       }
     } else {
