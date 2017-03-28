@@ -2,6 +2,7 @@
 var courses
 var currentResults = []
 var selected = []
+var selectedId = []
 var classSched = []
 var campuses = ['Bryn_Mawr', 'Haverford', 'Swarthmore'];
 var semesters = ['Fall_2015', 'Spring_2016', 'Fall_2016', 'Spring_2017'];
@@ -122,11 +123,11 @@ function main() {
     }
   });
   $(":checkbox").mouseup(function() {
-      $(this).blur();
-    })
-    //Changes***
-    //createEvent("MWF Course", "1000", "9:30am", "10:20am", "MWF");
-    //createEvent("TTH Course", "2000", "1:10pm", "2:30pm", "TTH");
+    $(this).blur();
+  })
+  //Changes***
+  //createEvent("MWF Course", "1000", "9:30am", "10:20am", "MWF");
+  //createEvent("TTH Course", "2000", "1:10pm", "2:30pm", "TTH");
 }
 
 function timeConvert(str) {
@@ -141,7 +142,7 @@ function timeConvert(str) {
   return s;
 }
 
-function createEvent(course_name, course_number, start_time, end_time, repeat) {
+function createEvent(course_name, course_number, semester, campus, start_time, end_time, repeat) {
   var sd = "01/17/2017"
   var ed = "05/30/2017"
   var el = 60 * (timeConvert(end_time) - timeConvert(start_time))
@@ -176,14 +177,16 @@ function createEvent(course_name, course_number, start_time, end_time, repeat) {
       repNums = ""
   }
   var id = scheduler.addEvent({
-    id: course_number,
-    start_date: "01/17/2017" + " " + start_time,
-    end_date: "05/27/2017" + " " + end_time,
+    id: semester + " " + campus + " " + course_number,
+    start_date: sd + " " + start_time,
+    end_date: ed + " " + end_time,
     rec_type: "week_1___" + repNums,
     event_length: el,
     event_pid: 0,
     text: course_name
   })
+  console.log(id);
+  selectedId.push(id);
 }
 //Changes***
 
@@ -358,37 +361,38 @@ function update(row) {
     if (index > -1) {
       courses[course["Campus"]][course["Semester"]].splice(index, 1)
     }
-    //console.log(`Added ${course["Course Title"]} (${course["Campus"]}) to selected`)
-  } else if ($(checkbox).attr('row_pressed') === "true") {
-    $(checkbox).attr('row_pressed', "false")
-    checkbox.className = "tableRow"
-    courses[course["Campus"]][course["Semester"]].push(course)
-    index = selected.indexOf(course)
-    if (index > -1) {
-      selected.splice(index, 1)
-    }
-    //console.log(`Removed ${course["Course Title"]} (${course["Campus"]}) from selected`)
-  }
-  classSched = []
-  scheduler.parse(classSched, "json")
-  for (course in selected) {
-    times = selected[course]['Time And Days'].split(', ').join(',').split(',')
+    times = course["Time And Days"].split(', ').join(',').split(',')
     if (!(times[0] === "")) {
       for (time in times) {
         //console.log(times[time])
         delTime = times[time].split(/ |-/)
         //console.log(delTime)
-        createEvent(selected[course]["Course Title"], selected[course]["CRN"], delTime[1], delTime[2], delTime[0]);
+        createEvent(course["Course Title"], course["CRN"], course["Semester"], course["Campus"], delTime[1], delTime[2], delTime[0]);
       }
     } else {
-      scheduler.addEventNow({
-        id: selected[course]["CRN"],
+      id = scheduler.addEventNow({
+        id: course["Semester"] + " " + course["Campus"] + " " + course["CRN"],
         start_date: "01/01/2017 12:00am",
         end_date: "01/01/2017 12:00am",
-        text: selected[course]["Course Title"]
+        text: course["Course Title"]
       })
+      selectedId.push(id)
     }
+    //console.log(`Added ${course["Course Title"]} (${course["Campus"]}) to selected`)
+  } else if ($(row).attr('row_pressed') === "true") {
+    $(row).attr('row_pressed', "false")
+    row.className = "tableRow"
+    courses[course["Campus"]][course["Semester"]].push(course)
+    index = selected.indexOf(course)
+    if (index > -1) {
+      selected.splice(index, 1)
+      scheduler.deleteEvent(selectedId[index])
+      selectedId.splice(index, 1)
+    }
+    //console.log(`Removed ${course["Course Title"]} (${course["Campus"]}) from selected`)
   }
+  classSched = []
+  scheduler.parse(classSched, "json")
   //console.log(classSched)
 
 }
