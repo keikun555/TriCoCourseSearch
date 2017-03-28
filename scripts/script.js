@@ -34,7 +34,7 @@ var semesterSchedule = {
       'end': '04/29/2016'
     }
   },
-  'Fall_2016' {
+  'Fall_2016': {
     'Bryn_Mawr': {
       'start': '08/29/2016',
       'end': '12/08/2016'
@@ -48,7 +48,7 @@ var semesterSchedule = {
       'end': '12/06/2016'
     }
   },
-  'Spring_2017' {
+  'Spring_2017': {
     'Bryn_Mawr': {
       'start': '01/17/2017',
       'end': '04/28/2017'
@@ -62,7 +62,7 @@ var semesterSchedule = {
       'end': '04/28/2017'
     }
   },
-  'Fall_2017' {
+  'Fall_2017': {
     'Bryn_Mawr': {
       'start': '09/05/2017',
       'end': '01/22/2017'
