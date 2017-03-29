@@ -111,6 +111,7 @@ function main() {
   /*called when body loads*/
   scheduler.init('scheduler_here', new Date(), "week");
   scheduler.config.repeat_precise = true;
+  //for exporting recurring events
   $('#calendar').collapse({
     toggle: true
   })
@@ -141,7 +142,98 @@ function main() {
   //createEvent("TTH Course", "2000", "1:10pm", "2:30pm", "TTH");
 }
 
+function getRRULE(course) {
+  //given course event, return RRULE of recurrence
+  rec_type = course.rec_type.slice(9).split(",")
+  rule = "RRULE:FREQ=WEEKLY;BYDAY="
+  rec_values = []
+  for (value in rec_type) {
+    switch (rec_type[value]) {
+      case "1":
+        rec_values.push("MO")
+        break;
+      case "2":
+        rec_values.push("TU")
+        break;
+      case "3":
+        rec_values.push("WE")
+        break;
+      case "4":
+        rec_values.push("TH")
+        break;
+      case "5":
+        rec_values.push("FR")
+        break;
+      case "6":
+        rec_values.push("SA")
+        break;
+      case "7":
+        rec_values.push("SU")
+        break;
+      default:
+        console.log("getRRULE: error with rec_type format");
+    }
 
+  }
+  rule += rec_values.join(",")
+  return rule
+}
+
+function getICal() {
+  //creates .ics format file, returns it as string
+  var dateToString = scheduler.date.date_to_str("%Y%m%dT%H%i%s")
+  var selectedCourse = scheduler.getEvent(selectedId[0]);
+  console.log(selectedCourse);
+  var textL = []
+  var tempCourse;
+  textL.push("BEGIN:VCALENDAR")
+  textL.push("VERSION:2.0")
+  textL.push("PRODID:-//SwatLyfe//NONSGML v2.2//EN")
+  textL.push("DESCRIPTION:Created by none other than the based Imada Sensei :)")
+  var now = new Date(2017, 03, 06)
+  console.log(now.getFullYear());
+  for (var i = 0; i < selectedId.length; i++) {
+    tempCourse = scheduler.getEvent(selectedId[i])
+    textL.push("BEGIN:VEVENT")
+    textL.push("UID:swatlyfe@" + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0,
+        v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    }))
+    textL.push("DTSTAMP:" + dateToString(new Date()) + "Z")
+    textL.push("DTSTART;TZID=America/New_York:" + dateToString(tempCourse.start_date))
+    textL.push(getRRULE(tempCourse) + ";UNTIL=" + dateToString(tempCourse.end_date))
+    textL.push("SUMMARY:" + tempCourse.text)
+    textL.push("END:VEVENT")
+  }
+  textL.push("END:VCALENDAR")
+  return textL.join("\n");
+}
+
+function downloadICal() {
+  var text = getICal()
+  var filename = "calendar"
+  var blob = new Blob([text], {
+    type: "text/plain;charset=utf-8"
+  });
+  saveAs(blob, filename + ".ics");
+  // scheduler.data_attributes = function() {
+  //   var empty = function(a) {
+  //     return a || "";
+  //   }
+  //   return [
+  //     ["id"],
+  //     ["text"],
+  //     ["start_date", scheduler.templates.xml_format],
+  //     ["end_date", scheduler.templates.xml_format],
+  //     ["rec_type", empty],
+  //     ["event_length", empty],
+  //     ["event_pid", empty]
+  //   ];
+  // }
+  // var ical = scheduler.toICal()
+  // console.log(ical);
+}
 
 function timeConvert(str) {
   var p = str.split(':'),
@@ -205,7 +297,7 @@ function createEvent(course_name, course_number, semester, campus, start_time, e
 
 function loadData() {
   courses = {};
-  var urlStub = 'https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/data/';
+  var urlStub = 'https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/final/data/';
   //formats to json of campuses of semesters of courses
   for (campus in campuses) {
     var cam = {};
