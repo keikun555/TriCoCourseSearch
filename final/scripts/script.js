@@ -245,6 +245,7 @@ function find(searchText, semester, campuses) {
     ]
   };
   list = []
+  //console.log(courses);
   for (campus in campuses) {
     tempList = courses[campuses[campus]][semester].reduce(function(L, element) {
       return L.concat(element);
@@ -285,10 +286,13 @@ function search() {
   var tableHeader = '<thead><tr><th style="text-align: center;">Course Name</th><th style="text-align: center;">Registration ID</th><th style="text-align: center;">Course Number</th><th style="text-align: center;">Time Offered</th><th style="text-align: center;">Instructor</th><th style="text-align: center;">Campus</th></tr></thead>'
   searchText = document.getElementById("search").value.trim() //.split(' ');
   //if nothing in searchText, shows all courses in given campus and semester
-  semester = document.getElementById('semester').textContent.split(' ');
-  if (semester[0] === 'Select') {
+  semesterList = document.getElementById('semester').textContent.trim().split(' ');
+  semester = [semesterList[1] + "_" + semesterList[0]]
+  //console.log(semester);
+  if (semesterList[0] === 'Select') {
     //if no semester is selected, choose most recent one
     semester = $('#dropdown').find('a').first().text().split(' ');
+    //console.log(semester);
   }
   semester = semester.reverse().join('_');
   allcampuses = ["brynmawr", "haverford", "swarthmore"];
