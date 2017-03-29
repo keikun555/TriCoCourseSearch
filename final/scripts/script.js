@@ -5,7 +5,7 @@ var selected = []
 var selectedId = []
 var classSched = []
 var campuses = ['Bryn_Mawr', 'Haverford', 'Swarthmore'];
-var semesters = ['Fall_2015', 'Spring_2016', 'Fall_2016', 'Spring_2017'];
+var semesters = ['Fall_2015', 'Spring_2016', 'Fall_2016', 'Spring_2017', 'Fall_2017'];
 var semesterSchedule = {
   'Fall_2015': {
     'Bryn_Mawr': {
@@ -118,7 +118,7 @@ function main() {
   loadData()
   for (var i = semesters.length - 1; i >= 0; i--) {
     if (semesters[i].split('_')[0] == "Spring") {
-      $("#dropdown").append(`<li class="divider"></li><li class="dropdown-header"><span>${parseInt(semesters[i].split('_')[1]) + "-" + parseInt(semesters[i].split('_')[1])}</span></li>`)
+      $("#dropdown").append(`<li class="divider"></li><li class="dropdown-header"><span>${parseInt(semesters[i].split('_')[1] - 1) + "-" + parseInt(semesters[i].split('_')[1])}</span></li>`)
     }
     $("#dropdown").append(`<li><a href=#/ style="color: 042A2B;"><span>${semesters[i].split('_')[1] + " " + semesters[i].split('_')[0]}</span></a></li>`);
   }
@@ -248,8 +248,8 @@ function timeConvert(str) {
 }
 
 function createEvent(course_name, course_number, semester, campus, start_time, end_time, repeat) {
-  var sd = "01/17/2017"
-  var ed = "05/30/2017"
+  var sd = semesterSchedule[semester][campus]["start"]
+  var ed = semesterSchedule[semester][campus]["end"]
   var el = 60 * (timeConvert(end_time) - timeConvert(start_time))
   //console.log(el)
   var repNums
@@ -296,6 +296,7 @@ function createEvent(course_name, course_number, semester, campus, start_time, e
 //Changes***
 
 function loadData() {
+
   courses = {};
   var urlStub = 'https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/final/data/';
   //formats to json of campuses of semesters of courses
@@ -310,6 +311,18 @@ function loadData() {
         success: function(data) {}
       })["responseText"]);
       cam[semesters[semester]] = sem;
+      // var jqxhr = $.getJSON("./data/" + campuses[campus] + "/" + semesters[semester] + ".json", function() {
+      //     console.log("success");
+      //   })
+      //   .done(function() {
+      //     console.log("second success");
+      //   })
+      //   .fail(function() {
+      //     console.log("error");
+      //   })
+      //   .always(function() {
+      //     console.log("complete");
+      //   });
     }
     courses[campuses[campus]] = cam;
   }
@@ -401,36 +414,59 @@ function search() {
   for (campus in campuses) {
     campuses[campus] = campuses[campus].charAt(0).toUpperCase() + campuses[campus].slice(1);
   }
-  result = find(searchText, semester, campuses);
+  result = selected.concat(find(searchText, semester, campuses))
   currentResults = result
   $(table).html(tableHeader)
   if (result.length > 0) {
     for (course in result) {
-      var name = result[course]['Course Title'];
-      var id = result[course]['Registration ID'];
-      var num = result[course]['CRN'];
-      var time = "Not Specified"
-      try {
-        time = result[course]['Time And Days'].split(', ').join(',').split(',').join('<br>');
-      } catch (e) {}
-      var prof = "Not Specified"
-      try {
-        prof = result[course]['Instructor'].split(', ').join(',').split(',').join(', ');
-      } catch (e) {}
-      var camp
-      try {
-        camp = result[course]['Campus'].split('_').join(' ');
-      } catch (e) {}
-      var row;
-      row = `<tbody><tr onmouseleave='if($(this).attr("row_pressed")==="false"){this.className="tableRow"}' onmouseenter="rowHover(this)" id="${course}" type="checkbox" class="tableRow" data-toggle="buttons-toggle" onclick="update(this)" row_pressed="false" campus="${camp}"><td>${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
-      $(table).append(row);
+      //console.log(getRowHTML(result[course], selectedId.indexOf(result[course]["Semester"] + " " + result[course]["Campus"] + " " + result[course]["CRN"]) >= 0));
+      $(table).append(getRowHTML(result[course], selectedId.indexOf(result[course]["Semester"] + " " + result[course]["Campus"] + " " + result[course]["CRN"]) >= 0));
     }
   } else {
     $(table).html('<div class="alert alert-warning"><strong>No classes found!</strong></div>')
   }
 }
 
+function getRowHTML(course, isSelected) {
+  var name = course['Course Title'];
+  var id = course['Registration ID'];
+  var num = course['CRN'];
+  var time = "Not Specified"
+  var className = "tableRow"
+  if (isSelected) {
+    switch (course['Campus']) {
+      case "Swarthmore":
+        className = "rowSActive"
+        break;
+      case "Haverford":
+        className = "rowHActive"
+        break;
+      case "Bryn_Mawr":
+        className = "rowBMActive"
+        break;
+      default:
+        console.log("getRowHTML:Error campus not found");
+        break;
+    }
+  }
+  try {
+    time = course['Time And Days'].split(', ').join(',').split(',').join('<br>');
+  } catch (e) {}
+  var prof = "Not Specified"
+  try {
+    prof = course['Instructor'].split(', ').join(',').split(',').join(', ');
+  } catch (e) {}
+  var camp
+  try {
+    camp = course['Campus'].split('_').join(' ');
+  } catch (e) {}
+  var row;
+  return `<tbody><tr onmouseleave='if($(this).attr("row_pressed")==="false"){this.className="tableRow"}' onmouseenter="rowHover(this)" id="${course}" type="checkbox" class="${className}" data-toggle="buttons-toggle" onclick="update(this)" row_pressed="${isSelected}" campus="${camp}"><td>${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
+  //`<tbody><tr onmouseleave='if($(this).attr("row_pressed")==="false"){this.className="tableRow"}' onmouseenter="rowHover(this)" id="${course}" type="checkbox" class="tableRow" data-toggle="buttons-toggle" onclick="update(this)" row_pressed="false" campus="${camp}"><td>${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
+}
+
 function rowHover(row) {
+  //console.log($(row).attr("row_pressed"));
   if ($(row).attr("row_pressed") === "false") {
     switch ($(row).attr('campus')) {
       case "Swarthmore":
@@ -449,7 +485,7 @@ function rowHover(row) {
 }
 
 function update(row) {
-  course = currentResults[row.id]
+  course = currentResults[row.rowIndex - 1]
   if ($(row).attr('row_pressed') === "false") {
     $(row).attr('row_pressed', "true")
     switch ($(row).attr('campus')) {
