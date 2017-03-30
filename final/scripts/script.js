@@ -66,7 +66,7 @@ var semesterSchedule = {
   'Fall_2017': {
     'Bryn_Mawr': {
       'start': '09/05/2017',
-      'end': '01/22/2017'
+      'end': '12/14/2017'
     },
     'Haverford': {
       'start': '09/05/2017',
@@ -102,7 +102,7 @@ function main() {
   scheduler.config.hour_date = "%g:%i%a";
   //scheduler.config.hour_size_px = 42;
   scheduler.xy.scale_height = 20;
-  scheduler.xy.scroll_width = 0;
+  scheduler.xy.scroll_width = 1;
   scheduler.config.calendar_time = "%g:%i%a";
   scheduler.config.xml_date = "%m/%d/%Y %g:%i%a"
   scheduler.config.api_date = "%m/%d/%Y %g:%i%a"
@@ -111,11 +111,19 @@ function main() {
   /*called when body loads*/
   scheduler.init('scheduler_here', new Date(), "week");
   scheduler.config.repeat_precise = true;
+  scheduler.config.readonly = true;
   //for exporting recurring events
+  scheduler.updateView()
+  //scheduler.enableAutoWidth(true)
   $('#calendar').collapse({
     toggle: true
   })
-  loadData()
+  $('#calendar').on('shown.bs.collapse', function() {
+    scheduler.updateView()
+  })
+  if (semesters[semesters.length - 1].split('_')[0] == "Fall") {
+    $("#dropdown").append(`<li class="divider"></li><li class="dropdown-header"><span>${parseInt(semesters[semesters.length - 1].split('_')[1]) + "-" + (parseInt(semesters[semesters.length - 1].split('_')[1])+1)}</span></li>`)
+  }
   for (var i = semesters.length - 1; i >= 0; i--) {
     if (semesters[i].split('_')[0] == "Spring") {
       $("#dropdown").append(`<li class="divider"></li><li class="dropdown-header"><span>${parseInt(semesters[i].split('_')[1] - 1) + "-" + parseInt(semesters[i].split('_')[1])}</span></li>`)
@@ -137,6 +145,7 @@ function main() {
   $(":checkbox").mouseup(function() {
     $(this).blur();
   })
+  loadData()
   //Changes***
   //createEvent("MWF Course", "1000", "9:30am", "10:20am", "MWF");
   //createEvent("TTH Course", "2000", "1:10pm", "2:30pm", "TTH");
@@ -290,43 +299,75 @@ function createEvent(course_name, course_number, semester, campus, start_time, e
     event_pid: 0,
     text: course_name
   })
-  console.log(id);
+  switch(campus){
+    case "Swarthmore":
+      scheduler.getEvent(id).color = "#85274E"
+      break
+    case "Bryn_Mawr":
+      scheduler.getEvent(id).color = "#E8C91E"
+      break
+    case "Haverford":
+      scheduler.getEvent(id).color = "#D33F2E"
+      break
+    default:
+      break
+  }
   selectedId.push(id);
+  scheduler.updateView(sd)
 }
 //Changes***
 
 function loadData() {
 
   courses = {};
-  var urlStub = 'https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/final/data/';
+  //var urlStub = 'https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/final/data/';
   //formats to json of campuses of semesters of courses
   for (campus in campuses) {
     var cam = {};
     for (semester in semesters) {
+      var sem
       //gets data from url, for every semester for every campus
-      url = urlStub + campuses[campus] + "/" + semesters[semester] + ".json";
-      sem = $.parseJSON($.ajax({
-        url: url,
+      // url = urlStub + campuses[campus] + "/" + semesters[semester] + ".json";
+      // sem = $.parseJSON($.ajax({
+      //   url: url,
+      //   async: false,
+      //   success: function(data) {}
+      // })["responseText"]);
+      // cam[semesters[semester]] = sem;
+      // var json = $.getJSON("./data/" + campuses[campus] + "/" + semesters[semester] + ".json", function(data) {
+      //   console.log(data);
+      //   console.log(semesters[semester], campuses[campus]);
+      //   sem = data
+      //   cam[semesters[semester]] = sem
+      //   courses[campuses[campus]] = cam;
+      //   console.log(courses);
+      //   //console.log("success");
+      // }).fail(function() {
+      //   console.log("Error:file not found");
+      //   cam[semesters[semester]] = {}
+      // }).always(function() {
+      //   //console.log("complete");
+      // });
+      $.ajax({
+        url: "./data/" + campuses[campus] + "/" + semesters[semester] + ".json",
+        dataType: 'json',
         async: false,
-        success: function(data) {}
-      })["responseText"]);
-      cam[semesters[semester]] = sem;
-      // var jqxhr = $.getJSON("./data/" + campuses[campus] + "/" + semesters[semester] + ".json", function() {
-      //     console.log("success");
-      //   })
-      //   .done(function() {
-      //     console.log("second success");
-      //   })
-      //   .fail(function() {
-      //     console.log("error");
-      //   })
-      //   .always(function() {
-      //     console.log("complete");
-      //   });
+        //data: myData,
+        success: function(data) {
+          cam[semesters[semester]] = data
+        }
+      });
+      //console.log(JSON.stringify(jqxhr[0]));
+      //console.log(sem);
+      //cam[semesters[semester]] = sem
+      //console.log(cam);
+      //console.log(cam);
+
+      //console.log(courses);
     }
     courses[campuses[campus]] = cam;
   }
-  console.log(courses)
+  //console.log(courses['Swarthmore']["Fall_2017"])
 }
 
 function find(searchText, semester, campuses) {
@@ -361,6 +402,7 @@ function find(searchText, semester, campuses) {
   }
   //search the list
   var fuse = new Fuse(list, options)
+  console.log(searchText);
   return fuse.search(searchText)
   //
   // result = [];
@@ -558,6 +600,10 @@ function show_minical() {
   }
 }
 
+function get_type(thing) {
+  if (thing === null) return "[object Null]"; // special case
+  return Object.prototype.toString.call(thing);
+}
 /* used for debugging
 function get_type(thing) {
   if (thing === null) return "[object Null]"; // special case
