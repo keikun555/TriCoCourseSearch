@@ -108,10 +108,12 @@ function main() {
   scheduler.config.api_date = "%m/%d/%Y %g:%i%a"
   scheduler.config.include_end_by = true;
   scheduler.config.start_on_monday = false;
-  /*called when body loads*/
-  scheduler.init('scheduler_here', new Date(), "week");
+  scheduler.config.container_autoresize = true;
+  //scheduler.xy.nav_height = 0;
   scheduler.config.repeat_precise = true;
   scheduler.config.readonly = true;
+  /*called when body loads*/
+  scheduler.init('scheduler_here', new Date(), "week");
   //for exporting recurring events
   scheduler.updateView()
   //scheduler.enableAutoWidth(true)
