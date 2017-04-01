@@ -108,12 +108,10 @@ function main() {
   scheduler.config.api_date = "%m/%d/%Y %g:%i%a"
   scheduler.config.include_end_by = true;
   scheduler.config.start_on_monday = false;
-  scheduler.config.container_autoresize = true;
-  //scheduler.xy.nav_height = 0;
-  scheduler.config.repeat_precise = true;
-  scheduler.config.readonly = true;
   /*called when body loads*/
   scheduler.init('scheduler_here', new Date(), "week");
+  scheduler.config.repeat_precise = true;
+  scheduler.config.readonly = true;
   //for exporting recurring events
   scheduler.updateView()
   //scheduler.enableAutoWidth(true)
@@ -147,6 +145,12 @@ function main() {
   $(":checkbox").mouseup(function() {
     $(this).blur();
   })
+  $("[data-toggle=popover]").popover();
+  //$("#authors").attr('title', 'The greatest of them all')
+  $("#authors").attr('data-content', '<strong>Kei Imada</strong> - <br/>Full Stack Developer<br/><strong>Yichuan Yan</strong> - <br/>Designer<br/>Frontend Developer<br/><strong>Douglass Campbell</strong> - <br/>Frontend Developer<br/><strong>Ryan Jobson</strong> - <br/>Frontend Developer')
+  $('#changelog').on('shown.bs.modal', function(e){
+    $('#changelogButton').one('focus', function(e){$(this).blur();});
+});
   loadData()
   //Changes***
   //createEvent("MWF Course", "1000", "9:30am", "10:20am", "MWF");

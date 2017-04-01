@@ -289,6 +289,23 @@
 </head>
 
 <body onload="main()">
+  <div id="changelog" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">TriCo Course Scheduler Changelog</h4>
+        </div>
+        <div class="modal-body">
+          <h1>Coming soon!</h1>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div>
     <div class="jumbotron">
       <h1 class="text-center" style="font-size: 36px;color: grey;">TriCo Course Scheduler</h1>
@@ -332,7 +349,7 @@
         </div>
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12">
-            <a href="#calendar" class="btn btn-default btn-lg btn-block" data-toggle="collapse">Click for Calendar</a>
+            <a href="#calendar" class="btn btn-primary btn-lg btn-block" style="white-space: normal;" data-toggle="collapse">Click for Calendar</a>
           </div>
         </div>
       </div>
@@ -366,24 +383,23 @@
               </div>
               <br>
               <div class="row">
-                <div class="col-md-2 col-sm-6 col-xs-6">
-                  <div class="btn-group">
-                    <button type="button" id="semester" class="btn btn-default dropdown-toggle btn-block" data-toggle="dropdown" style="color: 042A2B;">Select Semester
+                <div class="col-md-2 col-sm-3 col-xs-3">
+                  <div class="dropdown">
+                    <button type="button" id="semester" class="btn btn-success dropdown-toggle btn-block" data-toggle="dropdown" style="color: 042A2B;">Semester
                         <span class="caret"></span>
                       </button>
                     <ul class="dropdown-menu" id="dropdown">
-                      <!--<li class="dropdown-header">2016-2017</li>
-                      <li><a href="#" style="color: 042A2B;">2017 Spring</a></li>
-                      <li><a href="#" style="color: 042A2B;">2016 Fall</a></li>
-                      <li class="divider"></li>
-                      <li class="dropdown-header">2015-2016</li>
-                      <li><a href="#" style="color: 042A2B;">2016 Spring</a></li>
-                      <li><a href="#" style="color: 042A2B;">2015 Fall</a></li>-->
                     </ul>
                   </div>
                 </div>
-                <div class="col-md-2 col-sm-6 col-xs-6">
-                  <input value="Export to iCal" type="button" class="btn btn-default btn-block" onclick='downloadICal()'>
+                <div class="col-md-2 col-sm-3 col-xs-3">
+                  <button type="button" class="btn btn-warning btn-block" onclick='downloadICal()'>Export to iCal</button>
+                </div>
+                <div class="col-md-2 col-sm-3 col-xs-3">
+                  <button id="authors" type="button" class="btn btn-block btn-info" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="The Developers" data-html="true" data-content="">Authors</button>
+                </div>
+                <div class="col-md-2 col-sm-3 col-xs-3">
+                  <button id="changelogButton" type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#changelog">Changelog</button>
                 </div>
               </div>
             </div>
