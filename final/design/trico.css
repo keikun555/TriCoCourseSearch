@@ -1,0 +1,242 @@
+@media only screen and (max-width: 800px) {
+    /* Force table to not be like tables anymore */
+    #no-more-tables table, #no-more-tables thead, #no-more-tables tbody, #no-more-tables th, #no-more-tables td, #no-more-tables tr {
+        display: block;
+    }
+    /* Hide table headers (but not display: none;, for accessibility) */
+    #no-more-tables thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    #no-more-tables tr {
+        border: 1px solid #ccc;
+    }
+    #no-more-tables td {
+        /* Behave like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        white-space: normal;
+        text-align: left;
+    }
+    #no-more-tables td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+    }
+    /*
+        Label the data
+        */
+    #no-more-tables td:before {
+        content: attr(data-title);
+    }
+}
+
+body {
+    /*font-size: 14px;*/
+}
+
+@include media-breakpoint-up(xs) {
+    body {
+        font-size: 12px;
+    }
+}
+
+@include media-breakpoint-up(sm) {
+    body {
+        font-size: 16px;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    body {
+        font-size: 20px;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    body {
+        font-size: 28px;
+    }
+}
+
+body {
+    background: url("https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/books.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    display: compact;
+    /*height: 2000px;*/
+}
+
+.jumbotron {
+    background: #F8F8F8;
+    color: grey;
+    opacity: .70;
+    padding: 10px 0 25px 0;
+    /*background-color:none !important;*/
+}
+
+.text-center {
+    color: white;
+}
+
+.container-box {
+    background: white;
+    left: 90%;
+    background-size: 20%;
+    background-repeat: no-repeat;
+    border-radius: 3px;
+    width: 97%;
+    opacity: .95;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-right: 1%;
+    padding-left: 1%;
+    text-align: center;
+    margin: 0 auto;
+    left: 50%;
+    top: 50%;
+}
+
+.btn-showall {
+    background-color: #7e57c2;
+    border-color: #7e57c2;
+    color: #F8F8F8;
+}
+
+.btn-showall:hover, .btn-showall:focus, .btn-showall:active, .btn-showall.active {
+    background-color: #7044bb;
+    border-color: #643da9;
+    color: #F8F8F8;
+}
+
+.btn-showall.disabled:hover, .btn-showall.disabled:focus, .btn-showall.disabled:active, .btn-showall.disabled.active, .btn-showall[disabled]:hover, .btn-showall[disabled]:focus, .btn-showall[disabled]:active, .btn-showall[disabled].active, fieldset[disabled] .btn-showall:hover, fieldset[disabled] .btn-showall:focus, fieldset[disabled] .btn-showall:active, fieldset[disabled] .btn-showall.active {
+    background-color: #7e57c2;
+    border-color: #7e57c2;
+    color: #F8F8F8;
+}
+
+.btn-swarthmore, .btn-swarthmore:focus {
+    color: #F8F8F8;
+    background-color: #DDC4CE;
+    border-color: #FFFFFF;
+    outline: none !important;
+}
+
+.btn-swarthmore:hover, .btn-swarthmore:active, .btn-swarthmore.active, .open .dropdown-toggle.btn-swarthmore {
+    color: #F8F8F8 !important;
+    background-color: #85274E !important;
+    border-color: #FFFFFF !important;
+}
+
+.btn-swarthmore:active, .btn-swarthmore.active, .open .dropdown-toggle.btn-swarthmore {
+    background-image: none;
+}
+
+.btn-swarthmore.disabled, .btn-swarthmore[disabled], fieldset[disabled] .btn-swarthmore, .btn-swarthmore.disabled:hover, .btn-swarthmore[disabled]:hover, fieldset[disabled] .btn-swarthmore:hover, .btn-swarthmore.disabled:focus, .btn-swarthmore[disabled]:focus, fieldset[disabled] .btn-swarthmore:focus, .btn-swarthmore.disabled:active, .btn-swarthmore[disabled]:active, fieldset[disabled] .btn-swarthmore:active, .btn-swarthmore.disabled.active, .btn-swarthmore[disabled].active, fieldset[disabled] .btn-swarthmore.active {
+    background-color: #768A8B;
+    color: F1F1F1;
+    border-color: #FFFFFF;
+}
+
+.btn-swarthmore .badge {
+    color: #BC899E;
+    background-color: #BBBDBA;
+}
+
+.btn-haverford, .btn-haverford:focus {
+    color: #F8F8F8;
+    background-color: #FFC0B9;
+    border-color: #FFFFFF;
+    outline: none !important;
+}
+
+.btn-haverford:hover, .btn-haverford:active, .btn-haverford.active, .open .dropdown-toggle.btn-haverford {
+    color: #F8F8F8 !important;
+    background-color: #D33F2E !important;
+    border-color: #FFFFFF !important;
+}
+
+.btn-haverford:active, .btn-haverford.active, .open .dropdown-toggle.btn-haverford {
+    background-image: none;
+}
+
+.btn-haverford.disabled, .btn-haverford[disabled], fieldset[disabled] .btn-haverford, .btn-haverford.disabled:hover, .btn-haverford[disabled]:hover, fieldset[disabled] .btn-haverford:hover, .btn-haverford.disabled:focus, .btn-haverford[disabled]:focus, fieldset[disabled] .btn-haverford:focus, .btn-haverford.disabled:active, .btn-haverford[disabled]:active, fieldset[disabled] .btn-haverford:active, .btn-haverford.disabled.active, .btn-haverford[disabled].active, fieldset[disabled] .btn-haverford.active {
+    background-color: #768A8B;
+    color: F1F1F1;
+    border-color: #FFFFFF;
+}
+
+.btn-haverford .badge {
+    color: #1A3D3E;
+    background-color: #231F20;
+}
+
+.btn-brynmawr, .btn-brynmawr:focus {
+    color: #F8F8F8;
+    background-color: #F2E499;
+    border-color: #FFFFFF;
+    outline: none !important;
+}
+
+.btn-brynmawr:hover, .btn-brynmawr:active, .btn-brynmawr.active, .open .dropdown-toggle.btn-brynmawr {
+    color: #F8F8F8 !important;
+    background-color: #E8C91E !important;
+    border-color: #FFFFFF !important;
+}
+
+.btn-brynmawr:active, .btn-brynmawr.active, .open .dropdown-toggle.btn-brynmawr {
+    background-image: none;
+}
+
+.btn-brynmawr.disabled, .btn-brynmawr[disabled], fieldset[disabled] .btn-brynmawr, .btn-brynmawr.disabled:hover, .btn-brynmawr[disabled]:hover, fieldset[disabled] .btn-brynmawr:hover, .btn-brynmawr.disabled:focus, .btn-brynmawr[disabled]:focus, fieldset[disabled] .btn-brynmawr:focus, .btn-brynmawr.disabled:active, .btn-brynmawr[disabled]:active, fieldset[disabled] .btn-brynmawr:active, .btn-brynmawr.disabled.active, .btn-brynmawr[disabled].active, fieldset[disabled] .btn-brynmawr.active {
+    background-color: #768A8B;
+    color: F1F1F1;
+    border-color: #FFFFFF;
+}
+
+.btn-brynmawr .badge {
+    color: #CFCA8B;
+    background-color: #FFFFFF;
+}
+
+.tableRow {
+    background: #ffffff;
+}
+
+.rowSHover {
+    background: #DDC4CE;
+}
+
+.rowSActive {
+    background: #85274E;
+    color: #F8F8F8;
+}
+
+.rowHHover {
+    background: #FFC0B9;
+}
+
+.rowHActive {
+    background: #D33F2E;
+    color: #F8F8F8;
+}
+
+.rowBMHover {
+    background: #F2E499;
+}
+
+.rowBMActive {
+    background: #E8C91E;
+    color: #F8F8F8;
+}

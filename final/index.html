@@ -12,7 +12,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <!-- Bootstrap! -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <!-- DHTMLX! -->
   <script src="./scripts/dhtmlxscheduler/dhtmlxscheduler.js"></script>
@@ -21,12 +20,7 @@
   <script src="./scripts/dhtmlxscheduler/ext/dhtmlxscheduler_quick_info.js"></script>
   <script src="./scripts/dhtmlxscheduler/ext/dhtmlxscheduler_minical.js"></script>
   <script src="./scripts/dhtmlxscheduler/ext/dhtmlxscheduler_serialize.js"></script>
-  <!--<link rel="stylesheet" type="text/css" href="./scripts/dhtmlxscheduler/custom_scroll/customscroll.css">
-  <script type="text/javascript" src="./scripts/dhtmlxscheduler/custom_scroll/customscroll.js"></script>
-  <script type="text/javascript">
-    dhtmlx.CustomScroll.init();
-  </script>
-  <script src="./scripts/dhtmlxscheduler/responsive/dhtmlxscheduler-responsive.js"></script>
+  <!--<script src="./scripts/dhtmlxscheduler/responsive/dhtmlxscheduler-responsive.js"></script>
   <link rel="stylesheet" href="./scripts/dhtmlxscheduler/responsive/dhtmlxscheduler-responsive.css" type="text/css">-->
   <!-- My Scripts -->
   <script src="./scripts/script.js"></script>
@@ -49,243 +43,7 @@
     ga('send', 'pageview');
   </script>
   <!--Custom CSS!-->
-  <style>
-    body {
-      font-size: 14px;
-    }
-
-    @include media-breakpoint-up(sm) {
-      body {
-        font-size: 16px;
-      }
-    }
-
-    @include media-breakpoint-up(md) {
-      body {
-        font-size: 20px;
-      }
-    }
-
-    @include media-breakpoint-up(lg) {
-      body {
-        font-size: 28px;
-      }
-    }
-
-    body {
-      background: url("https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/books.jpg");
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-size: 100% 100%;
-      display: compact;
-      /*height: 2000px;*/
-    }
-
-    .jumbotron {
-      background: #F8F8F8;
-      color: grey;
-      opacity: .70;
-      padding: 10px 0 25px 0;
-      /*background-color:none !important;*/
-    }
-
-    .text-center {
-      color: white;
-    }
-
-    .container-box {
-      background: white;
-      left: 90%;
-      background-size: 20%;
-      background-repeat: no-repeat;
-      border-radius: 3px;
-      width: 97%;
-      opacity: .95;
-      padding-top: 25px;
-      padding-bottom: 25px;
-      padding-right: 1%;
-      padding-left: 1%;
-      text-align: center;
-      margin: 0 auto;
-      left: 50%;
-      top: 50%;
-    }
-
-    .btn-swarthmore,
-    .btn-swarthmore:focus {
-      color: #F8F8F8;
-      background-color: #DDC4CE;
-      border-color: #FFFFFF;
-      outline: none !important;
-    }
-
-    .btn-swarthmore:hover,
-    .btn-swarthmore:active,
-    .btn-swarthmore.active,
-    .open .dropdown-toggle.btn-swarthmore {
-      color: #F8F8F8 !important;
-      background-color: #85274E !important;
-      border-color: #FFFFFF !important;
-    }
-
-    .btn-swarthmore:active,
-    .btn-swarthmore.active,
-    .open .dropdown-toggle.btn-swarthmore {
-      background-image: none;
-    }
-
-    .btn-swarthmore.disabled,
-    .btn-swarthmore[disabled],
-    fieldset[disabled] .btn-swarthmore,
-    .btn-swarthmore.disabled:hover,
-    .btn-swarthmore[disabled]:hover,
-    fieldset[disabled] .btn-swarthmore:hover,
-    .btn-swarthmore.disabled:focus,
-    .btn-swarthmore[disabled]:focus,
-    fieldset[disabled] .btn-swarthmore:focus,
-    .btn-swarthmore.disabled:active,
-    .btn-swarthmore[disabled]:active,
-    fieldset[disabled] .btn-swarthmore:active,
-    .btn-swarthmore.disabled.active,
-    .btn-swarthmore[disabled].active,
-    fieldset[disabled] .btn-swarthmore.active {
-      background-color: #768A8B;
-      color: F1F1F1;
-      border-color: #FFFFFF;
-    }
-
-    .btn-swarthmore .badge {
-      color: #BC899E;
-      background-color: #BBBDBA;
-    }
-
-    .btn-haverford,
-    .btn-haverford:focus {
-      color: #F8F8F8;
-      background-color: #FFC0B9;
-      border-color: #FFFFFF;
-      outline: none !important;
-    }
-
-    .btn-haverford:hover,
-    .btn-haverford:active,
-    .btn-haverford.active,
-    .open .dropdown-toggle.btn-haverford {
-      color: #F8F8F8 !important;
-      background-color: #D33F2E !important;
-      border-color: #FFFFFF !important;
-    }
-
-    .btn-haverford:active,
-    .btn-haverford.active,
-    .open .dropdown-toggle.btn-haverford {
-      background-image: none;
-    }
-
-    .btn-haverford.disabled,
-    .btn-haverford[disabled],
-    fieldset[disabled] .btn-haverford,
-    .btn-haverford.disabled:hover,
-    .btn-haverford[disabled]:hover,
-    fieldset[disabled] .btn-haverford:hover,
-    .btn-haverford.disabled:focus,
-    .btn-haverford[disabled]:focus,
-    fieldset[disabled] .btn-haverford:focus,
-    .btn-haverford.disabled:active,
-    .btn-haverford[disabled]:active,
-    fieldset[disabled] .btn-haverford:active,
-    .btn-haverford.disabled.active,
-    .btn-haverford[disabled].active,
-    fieldset[disabled] .btn-haverford.active {
-      background-color: #768A8B;
-      color: F1F1F1;
-      border-color: #FFFFFF;
-    }
-
-    .btn-haverford .badge {
-      color: #1A3D3E;
-      background-color: #231F20;
-    }
-
-    .btn-brynmawr,
-    .btn-brynmawr:focus {
-      color: #F8F8F8;
-      background-color: #F2E499;
-      border-color: #FFFFFF;
-      outline: none !important;
-    }
-
-    .btn-brynmawr:hover,
-    .btn-brynmawr:active,
-    .btn-brynmawr.active,
-    .open .dropdown-toggle.btn-brynmawr {
-      color: #F8F8F8 !important;
-      background-color: #E8C91E !important;
-      border-color: #FFFFFF !important;
-    }
-
-    .btn-brynmawr:active,
-    .btn-brynmawr.active,
-    .open .dropdown-toggle.btn-brynmawr {
-      background-image: none;
-    }
-
-    .btn-brynmawr.disabled,
-    .btn-brynmawr[disabled],
-    fieldset[disabled] .btn-brynmawr,
-    .btn-brynmawr.disabled:hover,
-    .btn-brynmawr[disabled]:hover,
-    fieldset[disabled] .btn-brynmawr:hover,
-    .btn-brynmawr.disabled:focus,
-    .btn-brynmawr[disabled]:focus,
-    fieldset[disabled] .btn-brynmawr:focus,
-    .btn-brynmawr.disabled:active,
-    .btn-brynmawr[disabled]:active,
-    fieldset[disabled] .btn-brynmawr:active,
-    .btn-brynmawr.disabled.active,
-    .btn-brynmawr[disabled].active,
-    fieldset[disabled] .btn-brynmawr.active {
-      background-color: #768A8B;
-      color: F1F1F1;
-      border-color: #FFFFFF;
-    }
-
-    .btn-brynmawr .badge {
-      color: #CFCA8B;
-      background-color: #FFFFFF;
-    }
-
-    .tableRow {
-      background: #ffffff;
-    }
-
-    .rowSHover {
-      background: #DDC4CE;
-    }
-
-    .rowSActive {
-      background: #85274E;
-      color: #F8F8F8;
-    }
-
-    .rowHHover {
-      background: #FFC0B9;
-    }
-
-    .rowHActive {
-      background: #D33F2E;
-      color: #F8F8F8;
-    }
-
-    .rowBMHover {
-      background: #F2E499;
-    }
-
-    .rowBMActive {
-      background: #E8C91E;
-      color: #F8F8F8;
-    }
-  </style>
+  <link rel="stylesheet" href="./design/trico.css">
 </head>
 
 <body onload="main()">
@@ -299,6 +57,34 @@
         </div>
         <div class="modal-body">
           <h1>Coming soon!</h1>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="gCalImportModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">How to Import .ics Files to Google Calendar</h4>
+        </div>
+        <div class="modal-body">
+          <p>We are considering an automatic import to google calendar, but for now, please use this guide!</p>
+          <ol>
+            <li>Download .ics file by clicking on <button type="button" class="btn btn-warning" onclick='downloadICal()'><span class="glyphicon glyphicon-download-alt visible-xs"></span><span class="hidden-xs">Export to iCal</span></button></li>
+            <li>Open <a href="https://calendar.google.com" target="_blank">Google Calendar</a> on a computer. Note: You can only import from a computer, not a phone or tablet.</li>
+            <li>In the top right, click Settings <img src="//storage.googleapis.com/support-kms-prod/2B5EC13DE82F73AA4D37FE6864A59C73B29D" alt="Settings" title="Settings" height="18"> <strong>&gt; Settings</strong>.</li>
+            <li>Open the <strong>Calendars</strong> tab.</li>
+            <li>Click <strong>Import calendar</strong>&nbsp;between the "My calendars" and "Other Calendars" sections.</li>
+            <li>Click <strong>Choose File</strong> and select the file you exported. The file should end in ".ics"</li>
+            <li>Choose which calendar to add the imported events to. By default, events will be imported into your primary calendar.</li>
+            <li>Click <strong>Import</strong>.</li>
+          </ol>
+          <p>This guide was borrowed from <a href="https://support.google.com/calendar/answer/37118?hl=en">here</a></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -347,9 +133,10 @@
             <div class="dhx_cal_data"></div>
           </div>
         </div>
+        <br>
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12">
-            <a href="#calendar" class="btn btn-primary btn-lg btn-block" style="white-space: normal;" data-toggle="collapse">Click for Calendar</a>
+            <a href="#calendar" class="btn btn-primary btn-lg btn-block" style="white-space: normal;" data-toggle="collapse" id="calendarButton" value="Show Calendar"></a>
           </div>
         </div>
       </div>
@@ -385,21 +172,21 @@
               <div class="row">
                 <div class="col-md-2 col-sm-3 col-xs-3">
                   <div class="dropdown">
-                    <button type="button" id="semester" class="btn btn-success dropdown-toggle btn-block" data-toggle="dropdown" style="color: 042A2B;">Semester
-                        <span class="caret"></span>
+                    <button type="button" id="semester" class="btn btn-success dropdown-toggle btn-block" data-toggle="dropdown" style="color: 042A2B;"><span class="glyphicon glyphicon-calendar visible-xs"></span><span class="hidden-xs">Semester
+                        <span class="caret"></span></span>
                       </button>
                     <ul class="dropdown-menu" id="dropdown">
                     </ul>
                   </div>
                 </div>
                 <div class="col-md-2 col-sm-3 col-xs-3">
-                  <button type="button" class="btn btn-warning btn-block" onclick='downloadICal()'>Export to iCal</button>
+                  <button id="importGCal" type="button" class="btn btn-warning btn-block" onclick='downloadICal()' data-toggle="popover" data-placement="right" data-trigger="manual" data-html="true" data-content=""><span class="glyphicon glyphicon-download-alt visible-xs"></span><span class="hidden-xs">Export to iCal</span></button>
                 </div>
                 <div class="col-md-2 col-sm-3 col-xs-3">
-                  <button id="authors" type="button" class="btn btn-block btn-info" data-toggle="popover" data-placement="bottom" data-trigger="focus" title="The Developers" data-html="true" data-content="">Authors</button>
+                  <button id="authors" type="button" class="btn btn-block btn-info" data-toggle="popover" data-placement="bottom" data-trigger="focus hover" title="The Developers" data-html="true" data-content=""><span class="glyphicon glyphicon-pencil visible-xs"></span><span class="hidden-xs">Developers</span></button>
                 </div>
                 <div class="col-md-2 col-sm-3 col-xs-3">
-                  <button id="changelogButton" type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#changelog">Changelog</button>
+                  <button id="changelogButton" type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#changelog"><span class="glyphicon glyphicon-duplicate visible-xs"></span><span class="hidden-xs">Changelog</span></button>
                 </div>
               </div>
             </div>
@@ -416,9 +203,9 @@
             <button id="haverford" type="checkbox" class="btn btn-primary btn-lg btn-block btn-haverford" data-toggle="buttons-toggle">Haverford</button>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12 table-responsive" style="color: 042A2B;">
-            <table id="table" class="table table-lg">
+        <div id="no-more-tables" class="row">
+          <div class="table-responsive" style="color: 042A2B;">
+            <table id="table" class="table table-lg col-sm-12 col-xs-12 cf">
             </table>
           </div>
         </div>

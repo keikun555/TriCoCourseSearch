@@ -103,6 +103,8 @@ function main() {
   //scheduler.config.hour_size_px = 42;
   scheduler.xy.scale_height = 20;
   scheduler.xy.scroll_width = 1;
+  //scheduler.config.hour_size_px = 84;
+  scheduler.config.separate_short_events = true;
   scheduler.config.calendar_time = "%g:%i%a";
   scheduler.config.xml_date = "%m/%d/%Y %g:%i%a"
   scheduler.config.api_date = "%m/%d/%Y %g:%i%a"
@@ -119,8 +121,12 @@ function main() {
     toggle: true
   })
   $('#calendar').on('shown.bs.collapse', function() {
+    $("#calendarButton").text("Hide Calendar")
     scheduler.updateView()
   })
+  $('#calendar').on('hidden.bs.collapse', function() {
+    $("#calendarButton").text("Show Calendar")
+  });
   if (semesters[semesters.length - 1].split('_')[0] == "Fall") {
     $("#dropdown").append(`<li class="divider"></li><li class="dropdown-header"><span>${parseInt(semesters[semesters.length - 1].split('_')[1]) + "-" + (parseInt(semesters[semesters.length - 1].split('_')[1])+1)}</span></li>`)
   }
@@ -136,7 +142,8 @@ function main() {
     $('#semester').text($(this).find('span')[0].innerHTML);
     $('#semester').append(' <span class="caret"></span>');
   });
-  $("#search").on("keydown", function(e) {
+
+  $("#search").on("keydown", function() {
     if (e.keyCode === 13) {
       //checks whether the pressed key is "Enter"
       search();
@@ -146,11 +153,33 @@ function main() {
     $(this).blur();
   })
   $("[data-toggle=popover]").popover();
+  $("#importGCal").popover({
+      trigger: "manual",
+      html: true,
+      animation: false
+    })
+    .on("mouseenter", function() {
+      var _this = this;
+      $(this).popover("show");
+      $(".popover").on("mouseleave", function() {
+        $(_this).popover('hide');
+      });
+    }).on("mouseleave", function() {
+      var _this = this;
+      setTimeout(function() {
+        if (!$(".popover:hover").length) {
+          $(_this).popover("hide");
+        }
+      }, 300);
+    });
   //$("#authors").attr('title', 'The greatest of them all')
+  $("#importGCal").attr('data-content', '<button id="importGCalButton" type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#gCalImportModal">How to Export to Google Calendar</button>')
   $("#authors").attr('data-content', '<strong>Kei Imada</strong> - <br/>Full Stack Developer<br/><strong>Yichuan Yan</strong> - <br/>Designer<br/>Frontend Developer<br/><strong>Douglass Campbell</strong> - <br/>Frontend Developer<br/><strong>Ryan Jobson</strong> - <br/>Frontend Developer')
-  $('#changelog').on('shown.bs.modal', function(e){
-    $('#changelogButton').one('focus', function(e){$(this).blur();});
-});
+  $('#changelog').on('shown.bs.modal', function(e) {
+    $('#changelogButton').one('focus', function(e) {
+      $(this).blur();
+    });
+  });
   loadData()
   //Changes***
   //createEvent("MWF Course", "1000", "9:30am", "10:20am", "MWF");
@@ -198,7 +227,7 @@ function getICal() {
   //creates .ics format file, returns it as string
   var dateToString = scheduler.date.date_to_str("%Y%m%dT%H%i%s")
   var selectedCourse = scheduler.getEvent(selectedId[0]);
-  console.log(selectedCourse);
+  //console.log(selectedCourse);
   var textL = []
   var tempCourse;
   textL.push("BEGIN:VCALENDAR")
@@ -206,7 +235,7 @@ function getICal() {
   textL.push("PRODID:-//SwatLyfe//NONSGML v2.2//EN")
   textL.push("DESCRIPTION:Created by none other than the based Imada Sensei :)")
   var now = new Date(2017, 03, 06)
-  console.log(now.getFullYear());
+  //console.log(now.getFullYear());
   for (var i = 0; i < selectedId.length; i++) {
     tempCourse = scheduler.getEvent(selectedId[i])
     textL.push("BEGIN:VEVENT")
@@ -305,7 +334,7 @@ function createEvent(course_name, course_number, semester, campus, start_time, e
     event_pid: 0,
     text: course_name
   })
-  switch(campus){
+  switch (campus) {
     case "Swarthmore":
       scheduler.getEvent(id).color = "#85274E"
       break
@@ -408,7 +437,7 @@ function find(searchText, semester, campuses) {
   }
   //search the list
   var fuse = new Fuse(list, options)
-  console.log(searchText);
+  //console.log(searchText);
   return fuse.search(searchText)
   //
   // result = [];
@@ -442,7 +471,7 @@ function search() {
   semesterList = document.getElementById('semester').textContent.trim().split(' ');
   semester = [semesterList[1] + "_" + semesterList[0]]
   //console.log(semester);
-  if (semesterList[0] === 'Select') {
+  if (semesterList[0] === 'Semester') {
     //if no semester is selected, choose most recent one
     semester = $('#dropdown').find('a').first().text().split(' ');
     //console.log(semester);
@@ -462,7 +491,14 @@ function search() {
   for (campus in campuses) {
     campuses[campus] = campuses[campus].charAt(0).toUpperCase() + campuses[campus].slice(1);
   }
-  result = selected.concat(find(searchText, semester, campuses))
+  if (searchText.length == 0) {
+    result = selected
+    for (campus in campuses) {
+      result = result.concat(courses[campuses[campus]][semester]);
+    }
+  } else {
+    result = selected.concat(find(searchText, semester, campuses))
+  }
   currentResults = result
   $(table).html(tableHeader)
   if (result.length > 0) {
@@ -509,7 +545,7 @@ function getRowHTML(course, isSelected) {
     camp = course['Campus'].split('_').join(' ');
   } catch (e) {}
   var row;
-  return `<tbody><tr onmouseleave='if($(this).attr("row_pressed")==="false"){this.className="tableRow"}' onmouseenter="rowHover(this)" id="${course}" type="checkbox" class="${className}" data-toggle="buttons-toggle" onclick="update(this)" row_pressed="${isSelected}" campus="${camp}"><td>${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
+  return `<tbody><tr onmouseleave='if($(this).attr("row_pressed")==="false"){this.className="tableRow"}' onmouseenter="rowHover(this)" id="${course}" type="checkbox" class="${className}" data-toggle="buttons-toggle" onclick="update(this)" row_pressed="${isSelected}" campus="${camp}"><td data-title="Course Name">${name}</td><td data-title="Registration ID">${id}</td><td data-title="Course Number">${num}</td><td data-title="Time">${time}</td><td data-title="Instructor">${prof}</td><td data-title="Campus">${camp}</td></tr></tbody>`
   //`<tbody><tr onmouseleave='if($(this).attr("row_pressed")==="false"){this.className="tableRow"}' onmouseenter="rowHover(this)" id="${course}" type="checkbox" class="tableRow" data-toggle="buttons-toggle" onclick="update(this)" row_pressed="false" campus="${camp}"><td>${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
 }
 
