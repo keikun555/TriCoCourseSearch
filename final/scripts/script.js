@@ -102,7 +102,7 @@ function main() {
   scheduler.config.hour_date = "%g:%i%a";
   //scheduler.config.hour_size_px = 42;
   scheduler.xy.scale_height = 20;
-  scheduler.xy.scroll_width = 1;
+  scheduler.xy.scroll_width = 0;
   //scheduler.config.hour_size_px = 84;
   scheduler.config.separate_short_events = true;
   scheduler.config.calendar_time = "%g:%i%a";
@@ -143,7 +143,7 @@ function main() {
     $('#semester').append(' <span class="caret"></span>');
   });
 
-  $("#search").on("keydown", function() {
+  $("#search").on("keydown", function(e) {
     if (e.keyCode === 13) {
       //checks whether the pressed key is "Enter"
       search();
