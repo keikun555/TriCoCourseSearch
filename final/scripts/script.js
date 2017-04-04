@@ -2,104 +2,24 @@
 var courses
 var currentResults = []
 var selected = []
-var selectedId = []
-var classSched = []
+var selectedId = {}
 var campuses = ['Bryn_Mawr', 'Haverford', 'Swarthmore'];
 var semesters = ['Fall_2015', 'Spring_2016', 'Fall_2016', 'Spring_2017', 'Fall_2017'];
-var semesterSchedule = {
-  'Fall_2015': {
-    'Bryn_Mawr': {
-      'start': '08/31/2015',
-      'end': '12/10/2015'
-    },
-    'Haverford': {
-      'start': '08/31/2015',
-      'end': '12/11/2015'
-    },
-    'Swarthmore': {
-      'start': '08/31/2015',
-      'end': '12/11/2015'
-    }
-  },
-  'Spring_2016': {
-    'Bryn_Mawr': {
-      'start': '01/19/2016',
-      'end': '04/29/2016'
-    },
-    'Haverford': {
-      'start': '01/19/2016',
-      'end': '04/29/2016'
-    },
-    'Swarthmore': {
-      'start': '01/19/2016',
-      'end': '04/29/2016'
-    }
-  },
-  'Fall_2016': {
-    'Bryn_Mawr': {
-      'start': '08/29/2016',
-      'end': '12/08/2016'
-    },
-    'Haverford': {
-      'start': '08/29/2016',
-      'end': '12/09/2016'
-    },
-    'Swarthmore': {
-      'start': '08/29/2016',
-      'end': '12/06/2016'
-    }
-  },
-  'Spring_2017': {
-    'Bryn_Mawr': {
-      'start': '01/17/2017',
-      'end': '04/28/2017'
-    },
-    'Haverford': {
-      'start': '01/17/2017',
-      'end': '04/28/2017'
-    },
-    'Swarthmore': {
-      'start': '01/17/2017',
-      'end': '04/28/2017'
-    }
-  },
-  'Fall_2017': {
-    'Bryn_Mawr': {
-      'start': '09/05/2017',
-      'end': '12/14/2017'
-    },
-    'Haverford': {
-      'start': '09/05/2017',
-      'end': '12/15/2017'
-    },
-    'Swarthmore': {
-      'start': '09/04/2017',
-      'end': '12/12/2017'
-    }
-  }
-}
+var semesterSchedule = {}
 
 function main() {
-  // /*called when body loads*/
-  // scheduler.init('scheduler_here', new Date(), "week");
-  // loadData()
-  // $('#dropdown').find('a').click(function(e) {
-  //   $('#semester').text(this.innerHTML);
-  //   $('#semester').append('<span class="caret"></span>');
-  // });
-  // $("#search").on("keydown", function(e) {
-  //   if (e.keyCode === 13) {
-  //     //checks whether the pressed key is "Enter"
-  //     search();
-  //   }
-  // });
-  // $(":checkbox").mouseup(function() {
-  //   $(this).blur();
-  // })
-  //$('scheduler_here').collapse("show")
+  initializeScheduler()
+  initializeJQuery()
+  loadData()
+  console.log(courses);
+  //Changes***
+}
+
+function initializeScheduler() {
   scheduler.config.separate_short_events = true;
   scheduler.config.repeat_date = "%m/%d/%Y";
   scheduler.config.hour_date = "%g:%i%a";
+  scheduler.config.scroll_hour = 8;
   //scheduler.config.hour_size_px = 42;
   scheduler.xy.scale_height = 20;
   scheduler.xy.scroll_width = 0;
@@ -110,6 +30,7 @@ function main() {
   scheduler.config.api_date = "%m/%d/%Y %g:%i%a"
   scheduler.config.include_end_by = true;
   scheduler.config.start_on_monday = false;
+  scheduler.config.touch = "force";
   /*called when body loads*/
   scheduler.init('scheduler_here', new Date(), "week");
   scheduler.config.repeat_precise = true;
@@ -117,6 +38,9 @@ function main() {
   //for exporting recurring events
   scheduler.updateView()
   //scheduler.enableAutoWidth(true)
+}
+
+function initializeJQuery() {
   $('#calendar').collapse({
     toggle: true
   })
@@ -180,10 +104,13 @@ function main() {
       $(this).blur();
     });
   });
-  loadData()
-  //Changes***
-  //createEvent("MWF Course", "1000", "9:30am", "10:20am", "MWF");
-  //createEvent("TTH Course", "2000", "1:10pm", "2:30pm", "TTH");
+  $.ajax({
+    url: './changelog.md',
+    dataType: 'text',
+    success: function(changelog) {
+      $('#changelogHere').html(micromarkdown.parse(changelog))
+    }
+  })
 }
 
 function getRRULE(course) {
@@ -236,19 +163,21 @@ function getICal() {
   textL.push("DESCRIPTION:Created by none other than the based Imada Sensei :)")
   var now = new Date(2017, 03, 06)
   //console.log(now.getFullYear());
-  for (var i = 0; i < selectedId.length; i++) {
-    tempCourse = scheduler.getEvent(selectedId[i])
-    textL.push("BEGIN:VEVENT")
-    textL.push("UID:swatlyfe@" + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random() * 16 | 0,
-        v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    }))
-    textL.push("DTSTAMP:" + dateToString(new Date()) + "Z")
-    textL.push("DTSTART;TZID=America/New_York:" + dateToString(tempCourse.start_date))
-    textL.push(getRRULE(tempCourse) + ";UNTIL=" + dateToString(tempCourse.end_date))
-    textL.push("SUMMARY:" + tempCourse.text)
-    textL.push("END:VEVENT")
+  for (var idStub in selectedId) {
+    for(var timeId in selectedId[idStub]){
+      tempCourse = scheduler.getEvent(selectedId[idStub][timeId])
+      textL.push("BEGIN:VEVENT")
+      textL.push("UID:swatlyfe@" + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+          v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      }))
+      textL.push("DTSTAMP:" + dateToString(new Date()) + "Z")
+      textL.push("DTSTART;TZID=America/New_York:" + dateToString(tempCourse.start_date))
+      textL.push(getRRULE(tempCourse) + ";UNTIL=" + dateToString(tempCourse.end_date))
+      textL.push("SUMMARY:" + tempCourse.text)
+      textL.push("END:VEVENT")
+    }
   }
   textL.push("END:VCALENDAR")
   return textL.join("\n");
@@ -291,118 +220,134 @@ function timeConvert(str) {
   return s;
 }
 
-function createEvent(course_name, course_number, semester, campus, start_time, end_time, repeat) {
-  var sd = semesterSchedule[semester][campus]["start"]
-  var ed = semesterSchedule[semester][campus]["end"]
-  var el = 60 * (timeConvert(end_time) - timeConvert(start_time))
-  //console.log(el)
-  var repNums
-  switch (repeat) {
-    case "MWF":
-      repNums = "1,3,5"
-      break;
-    case "TTH":
-      repNums = "2,4"
-      break;
-    case "F":
-      repNums = "5"
-      break;
-    case "W":
-      repNums = "3"
-      break;
-    case "M":
-      repNums = "1"
-      break;
-    case "T":
-      repNums = "2"
-      break;
-    case "TH":
-      repNums = "4"
-      break;
-    case "MW":
-      repNums = "1,3"
-      break;
-    default:
-      repNums = ""
+function createEvent(course, start_time, end_time, repeat) {
+  var course_name = course["Course Title"]
+  var course_number = course["CRN"]
+  var semester = course["Semester"]
+  var campus = course["Campus"]
+  var times = course["Time And Days"].split(', ').join(',').split(',')
+  var startDate = semesterSchedule[semester][campus]["start"]
+  var endDate = semesterSchedule[semester][campus]["end"]
+  var idStub = semester + " " + campus + " " + course_number
+  //createEvent(course, delTime[1], delTime[2], delTime[0]);
+  selectedId[idStub] = []
+  if (times[0] === "") {
+    // if time does not exist
+    id = scheduler.addEventNow({
+      id: idStub,
+      start_date: startDate,
+      end_date: endDate,
+      text: course["Course Title"]
+    })
+    switch (campus) {
+      case "Swarthmore":
+        scheduler.getEvent(id).color = "#85274E"
+        break
+      case "Bryn_Mawr":
+        scheduler.getEvent(id).color = "#E8C91E"
+        break
+      case "Haverford":
+        scheduler.getEvent(id).color = "#D33F2E"
+        break
+      default:
+        break
+    }
+    selectedId[idStub].push(id)
+    scheduler.updateView(startDate)
+  } else {
+    for (time in times) {
+      times[time] = (times[time]).split(/ |-/)
+      var start_time = times[time][1]
+      var end_time = times[time][2]
+      var repeat = times[time][0]
+      var eventLength = 60 * (timeConvert(end_time) - timeConvert(start_time))
+      var repNums
+      switch (repeat) {
+        case "MWF":
+          repNums = "1,3,5"
+          break;
+        case "TTH":
+          repNums = "2,4"
+          break;
+        case "F":
+          repNums = "5"
+          break;
+        case "W":
+          repNums = "3"
+          break;
+        case "M":
+          repNums = "1"
+          break;
+        case "T":
+          repNums = "2"
+          break;
+        case "TH":
+          repNums = "4"
+          break;
+        case "MW":
+          repNums = "1,3"
+          break;
+        default:
+          repNums = ""
+      }
+      var id = scheduler.addEvent({
+        id: idStub + " " + parseInt(time),
+        start_date: startDate + " " + start_time,
+        end_date: endDate + " " + end_time,
+        rec_type: "week_1___" + repNums,
+        event_length: eventLength,
+        event_pid: 0,
+        text: course_name
+      })
+      switch (campus) {
+        case "Swarthmore":
+          scheduler.getEvent(id).color = "#85274E"
+          break
+        case "Bryn_Mawr":
+          scheduler.getEvent(id).color = "#E8C91E"
+          break
+        case "Haverford":
+          scheduler.getEvent(id).color = "#D33F2E"
+          break
+        default:
+          break
+      }
+      selectedId[idStub].push(id)
+      scheduler.updateView(startDate)
+    }
   }
-  var id = scheduler.addEvent({
-    id: semester + " " + campus + " " + course_number,
-    start_date: sd + " " + start_time,
-    end_date: ed + " " + end_time,
-    rec_type: "week_1___" + repNums,
-    event_length: el,
-    event_pid: 0,
-    text: course_name
-  })
-  switch (campus) {
-    case "Swarthmore":
-      scheduler.getEvent(id).color = "#85274E"
-      break
-    case "Bryn_Mawr":
-      scheduler.getEvent(id).color = "#E8C91E"
-      break
-    case "Haverford":
-      scheduler.getEvent(id).color = "#D33F2E"
-      break
-    default:
-      break
-  }
-  selectedId.push(id);
-  scheduler.updateView(sd)
 }
-//Changes***
 
 function loadData() {
-
-  courses = {};
-  //var urlStub = 'https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/final/data/';
-  //formats to json of campuses of semesters of courses
-  for (campus in campuses) {
-    var cam = {};
-    for (semester in semesters) {
-      var sem
-      //gets data from url, for every semester for every campus
-      // url = urlStub + campuses[campus] + "/" + semesters[semester] + ".json";
-      // sem = $.parseJSON($.ajax({
-      //   url: url,
-      //   async: false,
-      //   success: function(data) {}
-      // })["responseText"]);
-      // cam[semesters[semester]] = sem;
-      // var json = $.getJSON("./data/" + campuses[campus] + "/" + semesters[semester] + ".json", function(data) {
-      //   console.log(data);
-      //   console.log(semesters[semester], campuses[campus]);
-      //   sem = data
-      //   cam[semesters[semester]] = sem
-      //   courses[campuses[campus]] = cam;
-      //   console.log(courses);
-      //   //console.log("success");
-      // }).fail(function() {
-      //   console.log("Error:file not found");
-      //   cam[semesters[semester]] = {}
-      // }).always(function() {
-      //   //console.log("complete");
-      // });
-      $.ajax({
-        url: "./data/" + campuses[campus] + "/" + semesters[semester] + ".json",
-        dataType: 'json',
-        async: false,
-        //data: myData,
-        success: function(data) {
-          cam[semesters[semester]] = data
-        }
-      });
-      //console.log(JSON.stringify(jqxhr[0]));
-      //console.log(sem);
-      //cam[semesters[semester]] = sem
-      //console.log(cam);
-      //console.log(cam);
-
-      //console.log(courses);
+  $.ajax({
+    dataType: "json",
+    url: "./data/schedule.json",
+    success: function(data) {
+      semesterSchedule = data
     }
-    courses[campuses[campus]] = cam;
+  });
+  courses = {}
+  //initialize courses json of json datastructure
+  for (campus in campuses) {
+    courses[campuses[campus]] = {}
+    for (semester in semesters) {
+      courses[campuses[campus]][semesters[semester]] = {}
+    }
   }
-  //console.log(courses['Swarthmore']["Fall_2017"])
+  //actually fill in the values
+  for (campus in campuses) {
+    for (semester in semesters) {
+      (function(cam, sem) {
+        $.ajax({
+          dataType: "json",
+          url: "./data/" + cam + "/" + sem + ".json",
+          success: function(data) {
+            courses[cam][sem] = data;
+          }
+        });
+      })(campuses[campus], semesters[semester])
+    }
+  }
 }
 
 function find(searchText, semester, campuses) {
@@ -421,8 +366,7 @@ function find(searchText, semester, campuses) {
       "Time And Days",
       "Department",
       "Instructor",
-      "CRN",
-      "Registration ID"
+      "CRN"
     ]
   };
   list = []
@@ -504,7 +448,7 @@ function search() {
   if (result.length > 0) {
     for (course in result) {
       //console.log(getRowHTML(result[course], selectedId.indexOf(result[course]["Semester"] + " " + result[course]["Campus"] + " " + result[course]["CRN"]) >= 0));
-      $(table).append(getRowHTML(result[course], selectedId.indexOf(result[course]["Semester"] + " " + result[course]["Campus"] + " " + result[course]["CRN"]) >= 0));
+      $(table).append(getRowHTML(result[course], selectedId.hasOwnProperty(result[course]["Semester"] + " " + result[course]["Campus"] + " " + result[course]["CRN"])));
     }
   } else {
     $(table).html('<div class="alert alert-warning"><strong>No classes found!</strong></div>')
@@ -568,6 +512,22 @@ function rowHover(row) {
   }
 }
 
+function deleteEvent(course) {
+  var course_number = course["CRN"]
+  var semester = course["Semester"]
+  var campus = course["Campus"]
+  var idStub = semester + " " + campus + " " + course_number
+  courses[course["Campus"]][course["Semester"]].push(course)
+  index = selected.indexOf(course)
+  if (index > -1) {
+    selected.splice(index, 1)
+    for(timeid in selectedId[idStub]) {
+      scheduler.deleteEvent(selectedId[idStub][timeid])
+    }
+    delete selectedId[idStub]
+  }
+}
+
 function update(row) {
   course = currentResults[row.rowIndex - 1]
   if ($(row).attr('row_pressed') === "false") {
@@ -590,38 +550,14 @@ function update(row) {
     if (index > -1) {
       courses[course["Campus"]][course["Semester"]].splice(index, 1)
     }
-    times = course["Time And Days"].split(', ').join(',').split(',')
-    if (!(times[0] === "")) {
-      for (time in times) {
-        //console.log(times[time])
-        delTime = times[time].split(/ |-/)
-        //console.log(delTime)
-        createEvent(course["Course Title"], course["CRN"], course["Semester"], course["Campus"], delTime[1], delTime[2], delTime[0]);
-      }
-    } else {
-      id = scheduler.addEventNow({
-        id: course["Semester"] + " " + course["Campus"] + " " + course["CRN"],
-        start_date: "01/01/2017 12:00am",
-        end_date: "01/01/2017 12:00am",
-        text: course["Course Title"]
-      })
-      selectedId.push(id)
-    }
+    createEvent(course);
     //console.log(`Added ${course["Course Title"]} (${course["Campus"]}) to selected`)
   } else if ($(row).attr('row_pressed') === "true") {
     $(row).attr('row_pressed', "false")
     row.className = "tableRow"
-    courses[course["Campus"]][course["Semester"]].push(course)
-    index = selected.indexOf(course)
-    if (index > -1) {
-      selected.splice(index, 1)
-      scheduler.deleteEvent(selectedId[index])
-      selectedId.splice(index, 1)
-    }
+    deleteEvent(course)
     //console.log(`Removed ${course["Course Title"]} (${course["Campus"]}) from selected`)
   }
-  classSched = []
-  scheduler.parse(classSched, "json")
   //console.log(classSched)
 
 }
@@ -642,10 +578,6 @@ function show_minical() {
   }
 }
 
-function get_type(thing) {
-  if (thing === null) return "[object Null]"; // special case
-  return Object.prototype.toString.call(thing);
-}
 /* used for debugging
 function get_type(thing) {
   if (thing === null) return "[object Null]"; // special case

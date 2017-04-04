@@ -3,9 +3,11 @@
 
 <head>
   <title>TriCo Course Scheduler</title>
-  <link rel="shortcut icon" href="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/tri.ico" />
+  <link rel="shortcut icon" href="./design/pic/tri.ico" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- micromarkdown.js -->
+  <script type="text/javascript" src="//simonwaldherr.github.io/micromarkdown.js/dist/micromarkdown.min.js"></script>
   <!-- FileSaver -->
   <script src="./scripts/FileSaver.js"></script>
   <!-- JQuery -->
@@ -25,6 +27,8 @@
   <!-- My Scripts -->
   <script src="./scripts/script.js"></script>
   <script src="./scripts/fuse.min.js"></script>
+  <!--Custom CSS!-->
+  <link rel="stylesheet" href="./design/trico.css">
   <!-- Google Analytics -->
   <script>
     (function(i, s, o, g, r, a, m) {
@@ -42,8 +46,6 @@
     ga('create', 'UA-91946928-1', 'auto');
     ga('send', 'pageview');
   </script>
-  <!--Custom CSS!-->
-  <link rel="stylesheet" href="./design/trico.css">
 </head>
 
 <body onload="main()">
@@ -55,8 +57,7 @@
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">TriCo Course Scheduler Changelog</h4>
         </div>
-        <div class="modal-body">
-          <h1>Coming soon!</h1>
+        <div id='changelogHere' class="modal-body">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -101,13 +102,13 @@
         <div class="row">
           <div class="col-md-3 col-sm-3 col-xs-3"></div>
           <div class="col-md-2 col-sm-2 col-xs-2">
-            <a href="http://www.swarthmore.edu/" target="_blank" shape="circle"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' src="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/S.png" /></a>
+            <a href="http://www.swarthmore.edu/" target="_blank" shape="circle"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' src="./design/pic/S.png" /></a>
           </div>
           <div class="col-md-2 col-sm-2 col-xs-2">
-            <a href="https://www.brynmawr.edu/" target="_blank" shape="circle"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' src="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/BM2.png" /></a>
+            <a href="https://www.brynmawr.edu/" target="_blank" shape="circle"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' src="./design/pic/BM2.png" /></a>
           </div>
           <div class="col-md-2 col-sm-2 col-xs-2">
-            <a href="https://www.haverford.edu/" target="_blank" shape="circle"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' src="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/H.png" /></a>
+            <a href="https://www.haverford.edu/" target="_blank" shape="circle"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' src="./design/pic/H.png" /></a>
           </div>
           <div class="col-md-3 col-sm-3 col-xs-3"></div>
         </div>
@@ -121,10 +122,9 @@
             <div class="dhx_cal_navline">
               <div class="dhx_cal_prev_button">&nbsp;</div>
               <div class="dhx_cal_next_button">&nbsp;</div>
-              <div class="dhx_cal_today_button"></div>
-              <div class="dhx_cal_date"></div>
-              <div class="dhx_minical_icon" id="dhx_minical_icon" onclick="show_minical()">&nbsp;</div>
-              <div class="dhx_cal_date"></div>
+              <!-- <div class="dhx_cal_today_button"></div> -->
+              <!-- <div class="dhx_minical_icon" id="dhx_minical_icon" onclick="show_minical()">&nbsp;</div> -->
+              <div class="dhx_cal_date" style="font-size: 16px;"></div>
               <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
               <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
               <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
@@ -142,21 +142,6 @@
       </div>
       <br>
       <div class="container">
-        <!--<div class="row" style="margin-bottom: 25px">
-            <div class="col-md-1 col-sm-2 col-xs-3"></div>
-            <div class="col-md-2 col-sm-2 col-xs-6">
-              <a href="http://www.swarthmore.edu/" target="_blank"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' onclick="slogin()" src="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/S.png" /></a>
-            </div>
-            <div class="col-md-2 col-sm-1 col-xs-3"></div>
-            <div class="col-md-2 col-sm-2 col-xs-6">
-              <a href="https://www.brynmawr.edu/" target="_blank"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' onclick="bmlogin()" src="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/BM2.png" /></a>
-            </div>
-            <div class="col-md-2 col-sm-1 col-xs-0"></div>
-            <div class="col-md-2 col-sm-2 col-xs-6">
-              <a href="https://www.haverford.edu/" target="_blank"><img class="img-responsive center-block" style='max-height: 50px; cursor: pointer;' onclick="hlogin()" src="https://raw.githubusercontent.com/keikun555/triCoCourseSearch/master/pictures/H.png" /></a>
-            </div>
-            <div class="col-md-1 col-sm-2 col-xs-0"></div>
-          </div>-->
         <div class="row">
           <div class="col-md-12">
             <div class="well">
@@ -203,8 +188,8 @@
             <button id="haverford" type="checkbox" class="btn btn-primary btn-lg btn-block btn-haverford" data-toggle="buttons-toggle">Haverford</button>
           </div>
         </div>
-        <div id="no-more-tables" class="row">
-          <div class="table-responsive" style="color: 042A2B;">
+        <div class="row">
+          <div id="no-more-tables" class="table-responsive" style="color: 042A2B;">
             <table id="table" class="table table-lg col-sm-12 col-xs-12 cf">
             </table>
           </div>
