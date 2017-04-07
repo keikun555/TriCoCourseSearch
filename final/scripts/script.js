@@ -11,8 +11,6 @@ function main() {
   initializeScheduler()
   initializeJQuery()
   loadData()
-  console.log(courses);
-  //Changes***
 }
 
 function initializeScheduler() {
@@ -35,6 +33,50 @@ function initializeScheduler() {
   scheduler.init('scheduler_here', new Date(), "week");
   scheduler.config.repeat_precise = true;
   scheduler.config.readonly = true;
+  scheduler.config.buttons_left = ["dhx_save_btn"];
+  scheduler.config.buttons_right = [];
+  scheduler.config.icons_select = [];
+  scheduler.templates.quick_info_content = function(start, end, ev) {
+    var actualEvent = scheduler.getEvent(ev.event_pid)
+    var returnText = "Instructor: " + actualEvent.instructor
+    if (actualEvent.instructor.length <= 1) {
+      returnText += "Unspecified"
+    }
+    returnText += "\nLocation: " + actualEvent.location
+    if (actualEvent.location.length <= 1) {
+      returnText += "Unspecified"
+    }
+    return returnText;
+  };
+  scheduler.attachEvent("onBeforeLightbox", function(id) {
+    ev = scheduler.getEvent(id)
+    $("#recurring_end_date").val(semesterSchedule[ev.semester][ev.campus]["end"]);
+    var recurring = scheduler.formSection("recurring").node.parentNode;
+    var button = recurring.querySelector(".dhx_custom_button");
+    button.click()
+    //button.style.display = "none";
+    return true;
+  });
+  scheduler.config.lightbox.sections = [{
+      name: "description",
+      height: 130,
+      map_to: "text",
+      type: "textarea",
+      focus: true
+    },
+    {
+      name: "recurring",
+      type: "recurring",
+      map_to: "rec_type",
+      button: "recurring",
+      form: "custom_recurring_lightbox"
+    }, {
+      name: "time",
+      height: 72,
+      type: "time",
+      map_to: "auto"
+    }
+  ];
   //for exporting recurring events
   scheduler.updateView()
   //scheduler.enableAutoWidth(true)
@@ -98,7 +140,7 @@ function initializeJQuery() {
     });
   //$("#authors").attr('title', 'The greatest of them all')
   $("#importGCal").attr('data-content', '<button id="importGCalButton" type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#gCalImportModal">How to Export to Google Calendar</button>')
-  $("#authors").attr('data-content', '<strong>Kei Imada</strong> - <br/>Full Stack Developer<br/><strong>Yichuan Yan</strong> - <br/>Designer<br/>Frontend Developer<br/><strong>Douglass Campbell</strong> - <br/>Frontend Developer<br/><strong>Ryan Jobson</strong> - <br/>Frontend Developer')
+  $("#authors").attr('data-content', '<strong>Kei Imada</strong> - <br/>Full Stack Developer<br/><strong>Yichuan Yan</strong> - <br/>Designer<br/>Frontend Developer<br/><strong>Douglas Campbell</strong> - <br/>Frontend Developer<br/><strong>Ryan Jobson</strong> - <br/>Frontend Developer<br/><strong>Calvin Chan</strong> - <br/>Quality Assurance<br/>')
   $('#changelog').on('shown.bs.modal', function(e) {
     $('#changelogButton').one('focus', function(e) {
       $(this).blur();
@@ -164,7 +206,7 @@ function getICal() {
   var now = new Date(2017, 03, 06)
   //console.log(now.getFullYear());
   for (var idStub in selectedId) {
-    for(var timeId in selectedId[idStub]){
+    for (var timeId in selectedId[idStub]) {
       tempCourse = scheduler.getEvent(selectedId[idStub][timeId])
       textL.push("BEGIN:VEVENT")
       textL.push("UID:swatlyfe@" + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -221,10 +263,13 @@ function timeConvert(str) {
 }
 
 function createEvent(course, start_time, end_time, repeat) {
+  //console.log(course);
   var course_name = course["Course Title"]
   var course_number = course["CRN"]
   var semester = course["Semester"]
   var campus = course["Campus"]
+  var instructor = course["Instructor"]
+  var location = course["Room Location"]
   var times = course["Time And Days"].split(', ').join(',').split(',')
   var startDate = semesterSchedule[semester][campus]["start"]
   var endDate = semesterSchedule[semester][campus]["end"]
@@ -237,8 +282,13 @@ function createEvent(course, start_time, end_time, repeat) {
       id: idStub,
       start_date: startDate,
       end_date: endDate,
-      text: course["Course Title"]
+      text: course["Course Title"],
+      location: location,
+      instructor: instructor,
+      semester: semester,
+      campus: campus
     })
+    //console.log(id);
     switch (campus) {
       case "Swarthmore":
         scheduler.getEvent(id).color = "#85274E"
@@ -297,7 +347,11 @@ function createEvent(course, start_time, end_time, repeat) {
         rec_type: "week_1___" + repNums,
         event_length: eventLength,
         event_pid: 0,
-        text: course_name
+        text: course_name,
+        location: location,
+        instructor: instructor,
+        semester: semester,
+        campus: campus
       })
       switch (campus) {
         case "Swarthmore":
@@ -521,7 +575,7 @@ function deleteEvent(course) {
   index = selected.indexOf(course)
   if (index > -1) {
     selected.splice(index, 1)
-    for(timeid in selectedId[idStub]) {
+    for (timeid in selectedId[idStub]) {
       scheduler.deleteEvent(selectedId[idStub][timeid])
     }
     delete selectedId[idStub]
