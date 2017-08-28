@@ -79,9 +79,7 @@ body {
 }
 
 .jumbotron {
-  background: #F8F8F8;
-  color: grey;
-  opacity: .70;
+  background-color:rgba(256,256,256,.7);
   padding: 10px 0 25px 0;
   /*background-color:none !important;*/
 }

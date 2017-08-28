@@ -74,7 +74,6 @@
   </div>
   <div style="clear:both">
   </div>
-
   <div id="changelog" class="modal fade" role="dialog">
     <div class="modal-dialog">
       <!-- Modal content-->
@@ -139,7 +138,14 @@
           <div class="col-md-3 col-sm-3 col-xs-3"></div>
         </div>
       </div>
-
+      <div class="row">
+        <div class="col-md-2 col-sm-3 col-xs-3">
+          <button id="authors" type="button" class="btn btn-block btn-outline-info" data-toggle="popover" data-placement="bottom" data-trigger="focus hover" title="The Developers" data-html="true" data-content=""><span class="glyphicon glyphicon-pencil visible-xs"></span><span class="hidden-xs">Developers</span></button>
+        </div>
+        <div class="col-md-2 col-sm-3 col-xs-3">
+          <button id="changelogButton" type="button" class="btn btn-outline-default btn-block" data-toggle="modal" data-target="#changelog"><span class="glyphicon glyphicon-duplicate visible-xs"></span><span class="hidden-xs">History</span></button>
+        </div>
+      </div>
     </div>
     <div class="container-box">
       <div class="container">
@@ -150,10 +156,10 @@
               <div class="dhx_cal_next_button">&nbsp;</div>
               <!-- <div class="dhx_cal_today_button"></div> -->
               <!-- <div class="dhx_minical_icon" id="dhx_minical_icon" onclick="show_minical()">&nbsp;</div> -->
-              <div class="dhx_cal_date" style="font-size: 16px;"></div>
-              <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
-              <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
-              <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+              <div class="dhx_cal_date hidden-xs"></div>
+              <div class="dhx_cal_tab" name="day_tab"></div>
+              <div class="dhx_cal_tab" name="week_tab"></div>
+              <div class="dhx_cal_tab" name="month_tab"></div>
             </div>
             <div class="dhx_cal_header"></div>
             <div class="dhx_cal_data"></div>
@@ -162,7 +168,7 @@
         <br>
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12">
-            <a href="#calendar" class="btn btn-primary btn-lg btn-block" style="white-space: normal;" data-toggle="collapse" id="calendarButton" value="Show Calendar"></a>
+            <a href="#calendar" class="btn btn-primary btn-lg btn-block" style="white-space: normal;" data-toggle="collapse" id="calendarButton" value="Show Scheduler"></a>
           </div>
         </div>
       </div>
@@ -192,12 +198,6 @@
                 </div>
                 <div class="col-md-2 col-sm-3 col-xs-3">
                   <button id="importGCal" type="button" class="btn btn-warning btn-block" onclick='downloadICal()' data-toggle="popover" data-placement="bottom" data-trigger="manual" data-html="true" data-content=""><span class="glyphicon glyphicon-download-alt visible-xs"></span><span class="hidden-xs">Export to iCal</span></button>
-                </div>
-                <div class="col-md-2 col-sm-3 col-xs-3">
-                  <button id="authors" type="button" class="btn btn-block btn-info" data-toggle="popover" data-placement="bottom" data-trigger="focus hover" title="The Developers" data-html="true" data-content=""><span class="glyphicon glyphicon-pencil visible-xs"></span><span class="hidden-xs">Developers</span></button>
-                </div>
-                <div class="col-md-2 col-sm-3 col-xs-3">
-                  <button id="changelogButton" type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#changelog"><span class="glyphicon glyphicon-duplicate visible-xs"></span><span class="hidden-xs">Changelog</span></button>
                 </div>
               </div>
             </div>

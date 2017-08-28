@@ -8,6 +8,12 @@ var semesters = ['Fall_2015', 'Spring_2016', 'Fall_2016', 'Spring_2017', 'Fall_2
 var semesterSchedule = {}
 
 function main() {
+  /*
+  TODO List
+  Relocate Developers and Changelog to the bottom
+  Change the design of the top jumbotron screen
+  Decrease number of global variables
+  */
   initializeScheduler()
   initializeJQuery()
   loadData()
@@ -36,14 +42,21 @@ function initializeScheduler() {
   scheduler.config.buttons_left = ["dhx_save_btn"];
   scheduler.config.buttons_right = [];
   scheduler.config.icons_select = [];
+  scheduler.templates.quick_info_date = function(start, end, ev) {
+    return scheduler.templates.event_header(start, end, ev);
+  };
   scheduler.templates.quick_info_content = function(start, end, ev) {
     var actualEvent = scheduler.getEvent(ev.event_pid)
-    var returnText = "Instructor: " + actualEvent.instructor
-    if (actualEvent.instructor.length <= 1) {
+    var returnText = "Instructor: "
+    if (actualEvent.hasOwnProperty('instructor') && actualEvent.instructor != undefined) {
+      returnText += actualEvent.instructor
+    } else {
       returnText += "Unspecified"
     }
-    returnText += "\nLocation: " + actualEvent.location
-    if (actualEvent.location.length <= 1) {
+    returnText += "<br/>Location: "
+    if (actualEvent.hasOwnProperty('location') && actualEvent.location != undefined) {
+      returnText += actualEvent.location
+    } else {
       returnText += "Unspecified"
     }
     return returnText;
@@ -87,11 +100,11 @@ function initializeJQuery() {
     toggle: true
   })
   $('#calendar').on('shown.bs.collapse', function() {
-    $("#calendarButton").text("Hide Calendar")
+    $("#calendarButton").text("Hide Scheduler")
     scheduler.updateView()
   })
   $('#calendar').on('hidden.bs.collapse', function() {
-    $("#calendarButton").text("Show Calendar")
+    $("#calendarButton").text("Show Scheduler")
   });
   if (semesters[semesters.length - 1].split('_')[0] == "Fall") {
     $("#dropdown").append(`<li class="divider"></li><li class="dropdown-header"><span>${parseInt(semesters[semesters.length - 1].split('_')[1]) + "-" + (parseInt(semesters[semesters.length - 1].split('_')[1])+1)}</span></li>`)
@@ -105,8 +118,8 @@ function initializeJQuery() {
   $("#dropdown").append('<li class="divider"></li>')
 
   $('#dropdown').find('a').click(function(e) {
-    $('#semester').text($(this).find('span')[0].innerHTML);
-    $('#semester').append(' <span class="caret"></span>');
+    $('#semester').text('');
+    $('#semester').append('<span class="glyphicon glyphicon-calendar visible-xs"></span><span class="hidden-xs">' + $(this).find('span')[0].innerHTML + ' <span class="caret"></span></span>');
   });
 
   $("#search").on("keydown", function(e) {
@@ -462,8 +475,9 @@ function find(searchText, semester, campuses) {
 }
 
 function search() {
+  console.log(courses);
   var table = document.getElementById("table");
-  var tableHeader = '<thead><tr><th style="text-align: center;">Course Name</th><th style="text-align: center;">Registration ID</th><th style="text-align: center;">Course Number</th><th style="text-align: center;">Time Offered</th><th style="text-align: center;">Instructor</th><th style="text-align: center;">Campus</th></tr></thead>'
+  var tableHeader = '<thead><tr><th style="text-align: center;">Course Name</th><th style="text-align: center;">Registration ID</th><th style="text-align: center;">Course Number</th><th style="text-align: center;">Time Offered</th><th style="text-align: center;">Instructor</th><th style="text-align: center;">Location</th><th style="text-align: center;">Campus</th></tr></thead>'
   searchText = document.getElementById("search").value.trim() //.split(' ');
   //if nothing in searchText, shows all courses in given campus and semester
   semesterList = document.getElementById('semester').textContent.trim().split(' ');
@@ -514,6 +528,7 @@ function getRowHTML(course, isSelected) {
   var id = course['Registration ID'];
   var num = course['CRN'];
   var time = "Not Specified"
+  var loc = course['Room Location']
   var className = "tableRow"
   if (isSelected) {
     switch (course['Campus']) {
@@ -543,7 +558,7 @@ function getRowHTML(course, isSelected) {
     camp = course['Campus'].split('_').join(' ');
   } catch (e) {}
   var row;
-  return `<tbody><tr onmouseleave='if($(this).attr("row_pressed")==="false"){this.className="tableRow"}' onmouseenter="rowHover(this)" id="${course}" type="checkbox" class="${className}" data-toggle="buttons-toggle" onclick="update(this)" row_pressed="${isSelected}" campus="${camp}"><td data-title="Course Name">${name}</td><td data-title="Registration ID">${id}</td><td data-title="Course Number">${num}</td><td data-title="Time">${time}</td><td data-title="Instructor">${prof}</td><td data-title="Campus">${camp}</td></tr></tbody>`
+  return `<tbody><tr onmouseleave='if($(this).attr("row_pressed")==="false"){this.className="tableRow"}' onmouseenter="rowHover(this)" id="${course}" type="checkbox" class="${className}" data-toggle="buttons-toggle" onclick="update(this)" row_pressed="${isSelected}" campus="${camp}"><td data-title="Course Name">${name}</td><td data-title="Registration ID">${id}</td><td data-title="Course Number">${num}</td><td data-title="Time">${time}</td><td data-title="Instructor">${prof}</td><td data-title="Location">${loc}</td><td data-title="Campus">${camp}</td></tr></tbody>`
   //`<tbody><tr onmouseleave='if($(this).attr("row_pressed")==="false"){this.className="tableRow"}' onmouseenter="rowHover(this)" id="${course}" type="checkbox" class="tableRow" data-toggle="buttons-toggle" onclick="update(this)" row_pressed="false" campus="${camp}"><td>${name}</td><td>${id}</td><td>${num}</td><td>${time}</td><td>${prof}</td><td>${camp}</td></tr></tbody>`
 }
 

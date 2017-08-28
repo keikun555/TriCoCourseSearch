@@ -1,3 +1,10 @@
+## May 30 2017
+* Minor rephrasing
+  * Changelog to History
+  * Calendar to Scheduler
+* Reordered buttons
+## April 9 2017
+* Fixed jumbled up calendar navigation on mobile phones
 ## April 3 2017
 * Load time significantly reduced
 * Enabled courses with different times per week to be displayed and exported
